@@ -7,9 +7,10 @@
     "tsc": "tsc",
     "lint": "eslint 'src/**/*.ts'",
     "format": "prettier 'src/**/*.ts'",
-    "test": "test",
+    "test": "",
     "clean": "rm -rf dist",
-    "build": "npm-run-all clean format lint tsc"
+    "build": "npm-run-all clean format lint tsc",
+    "check": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
