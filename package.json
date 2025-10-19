@@ -1,0 +1,37 @@
+{
+  "name": "my-dsl",
+  "version": "1.0.0",
+  "description": "とくになし",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "lint": "eslint 'src/**/*.ts'",
+    "format": "prettier 'src/**/*.ts'",
+    "test": "test",
+    "clean": "rm -rf dist",
+    "build": "npm-run-all clean format lint tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shiro-joe/my-dsl.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shiro-joe/my-dsl/issues"
+  },
+  "homepage": "https://github.com/shiro-joe/my-dsl#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.38.0",
+    "@types/node": "^24.8.1",
+    "@typescript-eslint/eslint-plugin": "^8.46.1",
+    "@typescript-eslint/parser": "^8.46.1",
+    "eslint": "^9.38.0",
+    "globals": "^16.4.0",
+    "jiti": "^2.6.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.1"
+  }
+}
