@@ -1,0 +1,8 @@
+{
+    "case": {
+        "name": "testA",
+        "arrange": "hoge",
+        "act": "fuga",
+        "assert": "hogefuga"
+    }
+}
