@@ -1,0 +1,10 @@
+// statement
+typeなかったらstatement
+type=origin なら元言語
+
+// case
+"add test" 
+
+test("add", () => {
+    expect(a).toBe(aa);
+})
