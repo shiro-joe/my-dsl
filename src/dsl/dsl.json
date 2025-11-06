@@ -1,8 +1,42 @@
 {
-    "case": {
-        "name": "testA",
-        "arrange": "hoge",
-        "act": "fuga",
-        "assert": "hogefuga"
-    }
+    "name": "ファイル名",
+
+    "import": [
+        {
+            "from": "ファイル名",
+            "name": "対象の名前",
+            "as": "ローカルの名前"
+        },
+        {
+            "from": "ファイル名",
+            "name": ["対象の名前", "対象の名前"],
+            "as": ["ローカルの名前", "ローカルの名前"]
+        }
+    ],
+
+    "main": [
+        {
+            "type": "statement",
+            "dsl": "aaa"
+        },
+        {
+            "type": "beforeAll",
+            "dsl": "aaa"
+        },
+        {
+            "type": "beforeEach",
+            "name": "aa",
+            "dsl": [{}, {}]
+        },
+        {
+            "type": "case",
+            "name": "aa",
+            "dsl": [{}]
+        },
+        {
+            "type": "case",
+            "dsl": "aaa"
+        }
+    ]
+    
 }

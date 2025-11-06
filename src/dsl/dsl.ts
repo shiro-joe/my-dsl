@@ -1,26 +1,26 @@
 "use strict";
 /* テストスイート */
-class Suite {
-  private cases: Case[];
-  private fixtures: Fixture[];
-  constructor(cases: Case[], fixtures: Fixture[]) {
-    this.cases = cases;
-    this.fixtures = fixtures;
-  }
-}
+// class Suite {
+//   private cases: Case[];
+//   private fixtures: Fixture[];
+//   constructor(cases: Case[], fixtures: Fixture[]) {
+//     this.cases = cases;
+//     this.fixtures = fixtures;
+//   }
+// }
 
 /* テストケース */
-class Case {}
+// class Case {}
 
-class Fixture {}
+// class Fixture {}
 
 /* テストケース内のAAA */
 
-class Assertion {}
+// class Assertion {}
 
-class Arrange {}
+// class Arrange {}
 
-class Act {}
+// class Act {}
 
 /* 生 */
-class Other {}
+// class Other {}
