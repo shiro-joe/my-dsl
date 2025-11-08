@@ -1,4 +1,5 @@
 {
+    "type": "file",
     "name": "ファイル名",
 
     "import": [
