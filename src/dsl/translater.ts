@@ -12,59 +12,9 @@ import { JUnitCodeGenerator } from "./junit-generator.js";
 import { UnittestCodeGenerator } from "./unittest-generator.js";
 import type { Generator } from "./generator.ts";
 
-const obj = {
-  type: "file",
-  name: "file name",
-  statements: [
-    {
-      type: "assign",
-      left: "x",
-      right: "2",
-    },
-    {
-      type: "assign",
-      left: "y",
-      right: {
-        type: "call",
-        target: "func",
-        args: ["1", "3"],
-      },
-    },
-    {
-      type: "beforeAll",
-      name: "do this before all tests",
-      statements: [],
-    },
-    {
-      type: "testCase",
-      name: "test_1",
-      statements: [
-        {},
-        {
-          type: "assertEqual",
-          target: {
-            type: "call",
-            target: "add",
-            args: [
-              {
-                type: "call",
-                target: "func",
-                args: ["2", "10"],
-              },
-              3,
-            ],
-          },
-          tobe: "12",
-        },
-      ],
-    },
-    {
-      type: "testCase",
-      name: "test_2",
-      statements: [],
-    },
-  ],
-};
+import fs from "node:fs";
+
+const obj = JSON.parse(fs.readFileSync("./ir.json", "utf-8"));
 
 // 変換実行するクラス
 
