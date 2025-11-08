@@ -24,12 +24,12 @@ const obj = {
       statements: [],
     },
     {
-      type: "case",
+      type: "testCase",
       name: "test_1",
       statements: [
         {},
         {
-          type: "assert(equal)",
+          type: "assertEqual",
           target: {
             type: "call",
             target: "add",
@@ -47,16 +47,13 @@ const obj = {
       ],
     },
     {
-      type: "case",
+      type: "testCase",
       name: "test_2",
       statements: [],
     },
   ],
 };
 
-// enum BLOCK_TYPE {
-//   FILE = "file",
-// }
 enum TYPE {
   FILE = "file",
   ASSIGN = "assign",
@@ -82,7 +79,7 @@ type callObject = {
   target: string;
   args: [];
 };
-/*
+
 type testCaseObject = {
   type: TYPE.TEST_CASE;
   name: string;
@@ -94,67 +91,37 @@ type assertEqualObject = {
   target: string | callObject;
   tobe: string | callObject;
 };
-*/
-// class GeneratorManager {
-//   // 各generator管理
-//   private static jestCodeGenerator: Generator;
-//   private static unittestCodeGenerator: Generator;
-//   private static junitCodeGenerator: Generator;
 
-//   public static getJestCodeGenerator(): Generator {
-//     if (!this.jestCodeGenerator) {
-//       this.jestCodeGenerator = new JestCodeGenerator();
-//     }
-//     return this.jestCodeGenerator;
-//   }
-
-//   public static getUnittestCodeGenerator(): Generator {
-//     if (!this.unittestCodeGenerator) {
-//       this.unittestCodeGenerator = new UnittestCodeGenerator();
-//     }
-//     return this.unittestCodeGenerator;
-//   }
-
-//   public static getJUnitCodeGenerator(): Generator {
-//     if (!this.junitCodeGenerator) {
-//       this.junitCodeGenerator = new JUnitCodeGenerator();
-//     }
-//     return this.junitCodeGenerator;
-//   }
-// }
-
-// generateCodeFromObjを持つ
-// objectを投げたらコードが文字列で返ってくる
+// コードが文字列で返ってくる
 interface Generator {
-  generateCodeFromObj: (element: object) => string;
   generateAssignCode: (left: string, right: string) => string;
   generateCallCode: (target: string, args: string[]) => string;
+  generateAssertEqualCode: (target: string, tobe: string) => string;
+  generateTestCaseCode: (name: string, statements: string[]) => string;
+  generateFileCode: (name: string, statements: string[]) => string;
 }
 
 // Jest用
 class JestCodeGenerator implements Generator {
   public constructor() {}
-  public generateCodeFromObj = (element: object) => {
-    console.log(element);
-    //console.log(this.generateAssignCode(element as assignObject));
-    return "a";
-  };
   public generateAssignCode = (left: string, right: string) => {
     return `${left} = ${right}`;
   };
   public generateCallCode = (target: string, args: string[]) => {
     return `${target}(${args.join(", ")})`;
   };
-  /*
-  private generateTestCaseCode(obj: testCaseObject): string {
-    const name = obj.name;
-
-    return "test case";
-  }
-  private generateAssertEqualCode(obj: assertEqualObject): string {
-    return "assert equal";
-  }
-    */
+  public generateTestCaseCode = (
+    name: string,
+    statements: string[],
+  ): string => {
+    return `test(${name}, () => { ${statements.join("; ")} })`;
+  };
+  public generateAssertEqualCode = (target: string, tobe: string): string => {
+    return `expect(${target}).tobe(${tobe})`;
+  };
+  public generateFileCode = (name: string, statements: string[]) => {
+    return `${name}\n${statements.join("; ")}`;
+  };
 }
 /*
 class UnittestCodeGenerator implements Generator {
@@ -195,18 +162,18 @@ class Translater {
   public constructor(generator: Generator, object: fileObject) {
     this.generator = generator;
     this.object = object;
+    this.translatedCode = this.translateFileObject(this.object);
   }
 
   // 変換済みコード取得
   public getTranslatedCode(): string {
-    this.translateFileObject(this.object);
     return this.translatedCode;
   }
 
   // 以下 object読み
-  private readonly translateFileObject = (obj: fileObject) => {
-    const res = [];
-    for (const statement of obj.statements) {
+  private readonly translateStatementArray = (statements: []) => {
+    const res: string[] = [];
+    for (const statement of statements) {
       const type = Object.values(statement)[0] as string;
       if (this.isKey(type)) {
         res.push(this.keyMap[type](statement));
@@ -215,7 +182,15 @@ class Translater {
       }
     }
     res.push("");
-    this.translatedCode = res.join("; ");
+    return res;
+  };
+  private readonly translateFileObject = (obj: fileObject) => {
+    const res = this.translateStatementArray(obj.statements);
+    return this.generator.generateFileCode(obj.name, res);
+  };
+  private readonly translateTestCaseObject = (obj: testCaseObject) => {
+    const res = this.translateStatementArray(obj.statements);
+    return this.generator.generateTestCaseCode(obj.name, res);
   };
   private readonly translateAssignObject = (obj: assignObject) => {
     const left: string = obj.left;
@@ -240,10 +215,27 @@ class Translater {
     return this.generator.generateCallCode(target, args);
   };
 
+  private translateAssertEqualObject = (obj: assertEqualObject) => {
+    let target: string, tobe: string;
+    if (typeof obj.target === "object") {
+      target = this.translateCallObject(obj.target);
+    } else {
+      target = obj.target;
+    }
+    if (typeof obj.tobe === "object") {
+      tobe = this.translateCallObject(obj.tobe);
+    } else {
+      tobe = obj.tobe;
+    }
+    return this.generator.generateAssertEqualCode(target, tobe);
+  };
+
   // typeと関数の割り当て
   private readonly keyMap = {
     assign: this.translateAssignObject,
     call: this.translateCallObject,
+    testCase: this.translateTestCaseObject,
+    assertEqual: this.translateAssertEqualObject,
   };
   private readonly isKey = (key: string): key is keyof typeof this.keyMap =>
     Object.hasOwn(this.keyMap, key);

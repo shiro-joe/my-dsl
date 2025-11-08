@@ -24,14 +24,14 @@
             ]
         },
         {
-            "type" : "case",
+            "type" : "testCase",
             "name" : "test_1",
             "statements" : [
                 {
 
                 },
                 {
-                    "type" : "assert(equal)",
+                    "type" : "assertEqual",
                     "target" : {
                         "type" : "call",
                         "target" : "add",
@@ -48,7 +48,7 @@
             ]
         },
         {
-            "type" : "case",
+            "type" : "testCase",
             "name" : "test_2",
             "statements" : [
 
