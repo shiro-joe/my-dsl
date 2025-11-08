@@ -13,12 +13,12 @@ export class JUnitCodeGenerator implements Generator {
     name: string,
     statements: string[],
   ): string => {
-    return `test(${name}, () => { ${statements.join("; ")} })`;
+    return `@Test public void ${name}() { ${statements.join(";")} }`;
   };
   public generateAssertEqualCode = (target: string, tobe: string): string => {
-    return `expect(${target}).tobe(${tobe})`;
+    return `assertEquals(${tobe}, ${target})`;
   };
   public generateFileCode = (name: string, statements: string[]) => {
-    return `${name}\n${statements.join("; ")}`;
+    return `public class ${name} {\n    ${statements.join("\n   ")}\n}`;
   };
 }

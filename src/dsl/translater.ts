@@ -8,8 +8,8 @@ import type {
   assertEqualObject,
 } from "./ir.js";
 import { JestCodeGenerator } from "./jest-generator.js";
-// import { JUnitCodeGenerator } from "./junit-generator.js";
-// import { UnittestCodeGenerator } from "./unittest-generator.js"
+import { JUnitCodeGenerator } from "./junit-generator.js";
+import { UnittestCodeGenerator } from "./unittest-generator.js";
 import type { Generator } from "./generator.ts";
 
 const obj = {
@@ -172,3 +172,11 @@ const gen = new JestCodeGenerator();
 
 const test = new Translater(gen, obj as fileObject);
 console.log(test.getTranslatedCode());
+
+const java = new JUnitCodeGenerator();
+const test2 = new Translater(java, obj as fileObject);
+console.log(test2.getTranslatedCode());
+
+const py = new UnittestCodeGenerator();
+const test3 = new Translater(py, obj as fileObject);
+console.log(test3.getTranslatedCode());
