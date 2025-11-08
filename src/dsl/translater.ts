@@ -7,6 +7,7 @@ import type {
   testCaseObject,
   assertEqualObject,
   declareObject,
+  setupTeardownObject,
 } from "./ir.js";
 import { JestCodeGenerator } from "./jest-generator.js";
 import { JUnitCodeGenerator } from "./junit-generator.js";
@@ -55,6 +56,14 @@ class Translater {
   private readonly translateFixtureObject = (obj: fixtureObject) => {
     const res = this.translateStatementArray(obj.statements);
     return this.generator.generateFixtureCode(obj.name, res);
+  };
+
+  // setup/teardown
+  private readonly translateSetupTeardownObject = (
+    obj: setupTeardownObject,
+  ) => {
+    const res = this.translateStatementArray(obj.statements);
+    return this.generator.generateSetupTeardownCode(obj.type, obj.name, res);
   };
 
   // test case
@@ -129,6 +138,10 @@ class Translater {
     testCase: this.translateTestCaseObject,
     assertEqual: this.translateAssertEqualObject,
     declare: this.translateDeclareObject,
+    beforeAll: this.translateSetupTeardownObject,
+    beforeEach: this.translateSetupTeardownObject,
+    afterAll: this.translateSetupTeardownObject,
+    afterEach: this.translateSetupTeardownObject,
   };
   private readonly isKey = (key: string): key is keyof typeof this.keyMap =>
     Object.hasOwn(this.keyMap, key);

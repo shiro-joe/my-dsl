@@ -11,4 +11,9 @@ export interface Generator {
     left: string,
     right: string,
   ) => string;
+  generateSetupTeardownCode: (
+    type: string,
+    name: string,
+    statements: string[],
+  ) => string;
 }

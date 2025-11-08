@@ -36,6 +36,12 @@ export class JestCodeGenerator implements Generator {
   ) => {
     return `const ${left} = ${right}`;
   };
+  public generateSetupTeardownCode = (
+    type: string,
+    _name: string,
+    statements: string[],
+  ) => {
+    return `${type}(() = > {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`;
+  };
 }
-
 export {};

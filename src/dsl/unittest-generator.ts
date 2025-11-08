@@ -34,4 +34,23 @@ export class UnittestCodeGenerator implements Generator {
   ) => {
     return `const ${left} = ${right}`;
   };
+  public generateSetupTeardownCode = (
+    type: string,
+    _name: string,
+    statements: string[],
+  ) => {
+    if (this.isKey(type)) {
+      return `${this.keyMap[type][0]}def ${this.keyMap[type][1]}:\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
+    } else {
+      return "";
+    }
+  };
+  private readonly keyMap = {
+    beforeAll: ["@classmethod\n", "setUpClass(cls)"],
+    beforeEach: ["", "setUp(self)"],
+    afterAll: ["@classmethod\n", "tearDownClass(cls)"],
+    afterEach: ["", "tearDown(self)"],
+  };
+  private readonly isKey = (key: string): key is keyof typeof this.keyMap =>
+    Object.hasOwn(this.keyMap, key);
 }

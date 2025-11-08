@@ -37,6 +37,12 @@ export type assertEqualObject = {
   toEqual: string | callObject;
 };
 
+export type setupTeardownObject = {
+  type: string;
+  name: string;
+  statements: [];
+};
+
 // enum TYPE {
 //   FILE = "fixture",
 //   ASSIGN = "assign",

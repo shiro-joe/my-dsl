@@ -35,4 +35,24 @@ export class JUnitCodeGenerator implements Generator {
   ) => {
     return `const ${left} = ${right}`;
   };
+  public generateSetupTeardownCode = (
+    type: string,
+    _name: string,
+    statements: string[],
+  ) => {
+    if (this.isKey(type)) {
+      return `@${this.keyMap[type][1]}\n${this.keyMap[type][0]}void ${type}() {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}}`;
+    } else {
+      return ``;
+    }
+  };
+
+  private readonly keyMap = {
+    beforeAll: ["static ", "BeforeAll"],
+    beforeEach: ["", "BeforeEach"],
+    afterAll: ["static ", "AfterAll"],
+    afterEach: ["", "AfterEach"],
+  };
+  private readonly isKey = (key: string): key is keyof typeof this.keyMap =>
+    Object.hasOwn(this.keyMap, key);
 }
