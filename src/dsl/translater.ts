@@ -1,5 +1,17 @@
 "use strict";
 
+import type {
+  callObject,
+  fileObject,
+  assignObject,
+  testCaseObject,
+  assertEqualObject,
+} from "./ir.js";
+import { JestCodeGenerator } from "./jest-generator.js";
+// import { JUnitCodeGenerator } from "./junit-generator.js";
+// import { UnittestCodeGenerator } from "./unittest-generator.js"
+import type { Generator } from "./generator.ts";
+
 const obj = {
   type: "file",
   name: "file name",
@@ -54,105 +66,7 @@ const obj = {
   ],
 };
 
-enum TYPE {
-  FILE = "file",
-  ASSIGN = "assign",
-  CALL = "call",
-  TEST_CASE = "testCase",
-  ASSERT_EQUAL = "assertEqual",
-}
-
-type fileObject = {
-  type: TYPE.FILE;
-  name: string;
-  statements: [];
-};
-
-type assignObject = {
-  type: TYPE.ASSIGN;
-  left: string;
-  right: string | callObject;
-};
-
-type callObject = {
-  type: TYPE.CALL;
-  target: string;
-  args: [];
-};
-
-type testCaseObject = {
-  type: TYPE.TEST_CASE;
-  name: string;
-  statements: [];
-};
-
-type assertEqualObject = {
-  type: TYPE.ASSERT_EQUAL;
-  target: string | callObject;
-  tobe: string | callObject;
-};
-
-// コードが文字列で返ってくる
-interface Generator {
-  generateAssignCode: (left: string, right: string) => string;
-  generateCallCode: (target: string, args: string[]) => string;
-  generateAssertEqualCode: (target: string, tobe: string) => string;
-  generateTestCaseCode: (name: string, statements: string[]) => string;
-  generateFileCode: (name: string, statements: string[]) => string;
-}
-
-// Jest用
-class JestCodeGenerator implements Generator {
-  public constructor() {}
-  public generateAssignCode = (left: string, right: string) => {
-    return `${left} = ${right}`;
-  };
-  public generateCallCode = (target: string, args: string[]) => {
-    return `${target}(${args.join(", ")})`;
-  };
-  public generateTestCaseCode = (
-    name: string,
-    statements: string[],
-  ): string => {
-    return `test(${name}, () => { ${statements.join("; ")} })`;
-  };
-  public generateAssertEqualCode = (target: string, tobe: string): string => {
-    return `expect(${target}).tobe(${tobe})`;
-  };
-  public generateFileCode = (name: string, statements: string[]) => {
-    return `${name}\n${statements.join("; ")}`;
-  };
-}
-/*
-class UnittestCodeGenerator implements Generator {
-  public constructor() {}
-  public generateCodeFromObj = (element: object) => {
-    console.log(element);
-    return "b";
-  };
-  public generateAssignCode = (left: string, right: string) => {
-    return `${left} = ${right}`;
-  };
-  public generateCallCode = (target: string, args: string[]) => {
-    return `${target}(${args.join(", ")})`;
-  };
-}
-
-class JUnitCodeGenerator implements Generator {
-  public constructor() {}
-  public generateCodeFromObj = (element: object) => {
-    console.log(element);
-    return "c";
-  };
-  public generateAssignCode = (left: string, right: string) => {
-    return `${left} = ${right}`;
-  };
-  public generateCallCode = (target: string, args: string[]) => {
-    return `${target}(${args.join(", ")})`;
-  };
-}
-*/
-// main部分
+// 変換実行するクラス
 
 class Translater {
   // コンストラクタ
@@ -171,6 +85,8 @@ class Translater {
   }
 
   // 以下 object読み
+
+  // statements[]
   private readonly translateStatementArray = (statements: []) => {
     const res: string[] = [];
     for (const statement of statements) {
@@ -184,14 +100,20 @@ class Translater {
     res.push("");
     return res;
   };
+
+  // file
   private readonly translateFileObject = (obj: fileObject) => {
     const res = this.translateStatementArray(obj.statements);
     return this.generator.generateFileCode(obj.name, res);
   };
+
+  // test case
   private readonly translateTestCaseObject = (obj: testCaseObject) => {
     const res = this.translateStatementArray(obj.statements);
     return this.generator.generateTestCaseCode(obj.name, res);
   };
+
+  // assign
   private readonly translateAssignObject = (obj: assignObject) => {
     const left: string = obj.left;
     let right: string;
@@ -202,6 +124,8 @@ class Translater {
     }
     return this.generator.generateAssignCode(left, right);
   };
+
+  // call
   private translateCallObject = (obj: callObject) => {
     const args: string[] = [];
     const target = obj.target;
@@ -215,6 +139,7 @@ class Translater {
     return this.generator.generateCallCode(target, args);
   };
 
+  // assert equal
   private translateAssertEqualObject = (obj: assertEqualObject) => {
     let target: string, tobe: string;
     if (typeof obj.target === "object") {
