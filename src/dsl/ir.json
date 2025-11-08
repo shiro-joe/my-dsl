@@ -1,6 +1,6 @@
 {
-    "type" : "file",
-    "name" : "file name",
+    "type" : "fixture",
+    "name" : "fixture name",
     "statements" : [
         {
             "type" : "assign",
@@ -27,9 +27,6 @@
             "type" : "testCase",
             "name" : "test_1",
             "statements" : [
-                {
-
-                },
                 {
                     "type" : "assertEqual",
                     "target" : {

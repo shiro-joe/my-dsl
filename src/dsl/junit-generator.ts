@@ -14,12 +14,15 @@ export class JUnitCodeGenerator implements Generator {
     name: string,
     statements: string[],
   ): string => {
-    return `@Test public void ${name}() {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}}`;
+    return `@Test\npublic void ${name}() {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}}`;
   };
-  public generateAssertEqualCode = (target: string, tobe: string): string => {
-    return `assertEquals(${tobe}, ${target})`;
+  public generateAssertEqualCode = (
+    target: string,
+    toEqual: string,
+  ): string => {
+    return `assertEquals(${toEqual}, ${target})`;
   };
-  public generateFileCode = (name: string, statements: string[]) => {
+  public generateFixtureCode = (name: string, statements: string[]) => {
     return `public class ${name} {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}}`;
   };
   public generateDeclareCode = (type: string, left: string) => {

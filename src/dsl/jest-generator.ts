@@ -17,11 +17,14 @@ export class JestCodeGenerator implements Generator {
   ): string => {
     return `test(${name}, () => {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`;
   };
-  public generateAssertEqualCode = (target: string, tobe: string): string => {
-    return `expect(${target}).tobe(${tobe})`;
+  public generateAssertEqualCode = (
+    target: string,
+    toEqual: string,
+  ): string => {
+    return `expect(${target}).toEqual(${toEqual})`;
   };
-  public generateFileCode = (name: string, statements: string[]) => {
-    return `${name}\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}`;
+  public generateFixtureCode = (name: string, statements: string[]) => {
+    return `describe(${name}, () => {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}});`;
   };
   public generateDeclareCode = (type: string, left: string) => {
     return `let ${left}`;

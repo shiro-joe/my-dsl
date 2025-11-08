@@ -2,7 +2,7 @@
 
 import type {
   callObject,
-  fileObject,
+  fixtureObject,
   assignObject,
   testCaseObject,
   assertEqualObject,
@@ -22,12 +22,12 @@ const obj = JSON.parse(fs.readFileSync("./ir.json", "utf-8"));
 class Translater {
   // コンストラクタ
   private generator: Generator;
-  private object: fileObject;
+  private object: fixtureObject;
   private translatedCode: string = "no result";
-  public constructor(generator: Generator, object: fileObject) {
+  public constructor(generator: Generator, object: fixtureObject) {
     this.generator = generator;
     this.object = object;
-    this.translatedCode = this.translateFileObject(this.object);
+    this.translatedCode = this.translateFixtureObject(this.object);
   }
 
   // 変換済みコード取得
@@ -51,10 +51,10 @@ class Translater {
     return res;
   };
 
-  // file
-  private readonly translateFileObject = (obj: fileObject) => {
+  // fixture
+  private readonly translateFixtureObject = (obj: fixtureObject) => {
     const res = this.translateStatementArray(obj.statements);
-    return this.generator.generateFileCode(obj.name, res);
+    return this.generator.generateFixtureCode(obj.name, res);
   };
 
   // test case
@@ -108,18 +108,18 @@ class Translater {
 
   // assert equal
   private translateAssertEqualObject = (obj: assertEqualObject) => {
-    let target: string, tobe: string;
+    let target: string, toEqual: string;
     if (typeof obj.target === "object") {
       target = this.translateCallObject(obj.target);
     } else {
       target = obj.target;
     }
-    if (typeof obj.tobe === "object") {
-      tobe = this.translateCallObject(obj.tobe);
+    if (typeof obj.toEqual === "object") {
+      toEqual = this.translateCallObject(obj.toEqual);
     } else {
-      tobe = obj.tobe;
+      toEqual = obj.toEqual;
     }
-    return this.generator.generateAssertEqualCode(target, tobe);
+    return this.generator.generateAssertEqualCode(target, toEqual);
   };
 
   // typeと関数の割り当て
@@ -138,16 +138,16 @@ class Translater {
 
 const gen = new JestCodeGenerator();
 
-const test = new Translater(gen, obj as fileObject);
+const test = new Translater(gen, obj as fixtureObject);
 console.log(test.getTranslatedCode());
 
 console.log("\njunit\n");
 
 const java = new JUnitCodeGenerator();
-const test2 = new Translater(java, obj as fileObject);
+const test2 = new Translater(java, obj as fixtureObject);
 console.log(test2.getTranslatedCode());
 
 console.log("\nunittest\n");
 const py = new UnittestCodeGenerator();
-const test3 = new Translater(py, obj as fileObject);
+const test3 = new Translater(py, obj as fixtureObject);
 console.log(test3.getTranslatedCode());

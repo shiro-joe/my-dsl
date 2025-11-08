@@ -1,6 +1,6 @@
 "use strict";
 
-export type fileObject = {
+export type fixtureObject = {
   type: string;
   name: string;
   statements: [];
@@ -34,18 +34,18 @@ export type testCaseObject = {
 export type assertEqualObject = {
   type: string;
   target: string | callObject;
-  tobe: string | callObject;
+  toEqual: string | callObject;
 };
 
 // enum TYPE {
-//   FILE = "file",
+//   FILE = "fixture",
 //   ASSIGN = "assign",
 //   CALL = "call",
 //   TEST_CASE = "testCase",
 //   ASSERT_EQUAL = "assertEqual",
 // }
 
-// export type fileObject = {
+// export type fixtureObject = {
 //   type: TYPE.FILE;
 //   name: string;
 //   statements: [];

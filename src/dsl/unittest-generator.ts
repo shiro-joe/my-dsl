@@ -15,10 +15,13 @@ export class UnittestCodeGenerator implements Generator {
   public generateTestCaseCode = (name: string, statements: string[]) => {
     return `def ${name}(self):\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
   };
-  public generateAssertEqualCode = (target: string, tobe: string): string => {
-    return `self.assertEqual(${target}, ${tobe})`;
+  public generateAssertEqualCode = (
+    target: string,
+    toEqual: string,
+  ): string => {
+    return `self.assertEqual(${target}, ${toEqual})`;
   };
-  public generateFileCode = (name: string, statements: string[]) => {
+  public generateFixtureCode = (name: string, statements: string[]) => {
     return `class ${name}(unittest.TestCase):\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
   };
   public generateDeclareCode = (type: string, left: string) => {
