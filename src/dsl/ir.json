@@ -1,0 +1,85 @@
+{
+    "type" : "fixture",
+    "name" : "fixture name",
+    "statements" : [
+        {
+            "type" : "assign",
+            "left" : "x",
+            "right" : "2"
+        },
+        {
+            "type" : "assign",
+            "left" : "y",
+            "right" : {
+                "type" : "call",
+                "target" : "func",
+                "args" : ["1", "3"]
+            }
+        },
+        {
+            "type" : "beforeAll",
+            "name" : "do this before all tests",
+            "statements" : [
+                {
+                    "type" : "assign",
+                    "left" : "y",
+                    "right" : {
+                        "type" : "call",
+                        "target" : "func",
+                        "args" : ["1", "3"]
+                    }
+                },
+                {
+                    "type" : "assign",
+                    "left" : "y",
+                    "right" : {
+                        "type" : "call",
+                        "target" : "func",
+                        "args" : ["1", "3"]
+                    }
+                }
+            ]
+        },
+        {
+            "type" : "testCase",
+            "name" : "test_1",
+            "statements" : [
+                {
+                    "type" : "assertEqual",
+                    "target" : {
+                        "type" : "call",
+                        "target" : "add",
+                        "args" : [
+                            {
+                                "type" : "call",
+                                "target" : "func",
+                                "args" : ["2", "10"]
+                            }, 3
+                        ]
+                    },
+                    "tobe" : "12"
+                }
+            ]
+        },
+        {
+            "type" : "testCase",
+            "name" : "test_2",
+            "statements" : [
+                {
+                    "type": "declare",
+                    "left": "num",
+                    "right": "0"
+                },
+                {
+                    "type" : "assertEqual",
+                    "target" : {
+                        "type" : "call",
+                        "target" : "mul",
+                        "args" : ["100", "num"]
+                    },
+                    "tobe" : "num"
+                }
+            ]
+        }
+    ]
+}

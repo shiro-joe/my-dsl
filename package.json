@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "とくになし",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "tsc": "tsc",
     "lint": "eslint 'src/**/*.ts'",
@@ -24,7 +25,7 @@
   "homepage": "https://github.com/shiro-joe/my-dsl#readme",
   "devDependencies": {
     "@eslint/js": "^9.38.0",
-    "@types/node": "^24.8.1",
+    "@types/node": "^24.10.0",
     "@typescript-eslint/eslint-plugin": "^8.46.1",
     "@typescript-eslint/parser": "^8.46.1",
     "eslint": "^9.38.0",
