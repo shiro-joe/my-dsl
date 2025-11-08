@@ -6,6 +6,7 @@ import type {
   assignObject,
   testCaseObject,
   assertEqualObject,
+  declareObject,
 } from "./ir.js";
 import { JestCodeGenerator } from "./jest-generator.js";
 import { JUnitCodeGenerator } from "./junit-generator.js";
@@ -47,7 +48,6 @@ class Translater {
         res.push("変換不可能");
       }
     }
-    res.push("");
     return res;
   };
 
@@ -89,6 +89,23 @@ class Translater {
     return this.generator.generateCallCode(target, args);
   };
 
+  // declare
+  private translateDeclareObject = (obj: declareObject) => {
+    const type = obj.data_type;
+    const left = obj.left;
+    let right;
+    if (typeof obj.right === "object") {
+      right = this.translateCallObject(obj.right);
+    } else {
+      right = obj.right;
+    }
+    if (right === "") {
+      return this.generator.generateDeclareCode(type, left);
+    } else {
+      return this.generator.generateDeclareAndInitializeCode(type, left, right);
+    }
+  };
+
   // assert equal
   private translateAssertEqualObject = (obj: assertEqualObject) => {
     let target: string, tobe: string;
@@ -111,6 +128,7 @@ class Translater {
     call: this.translateCallObject,
     testCase: this.translateTestCaseObject,
     assertEqual: this.translateAssertEqualObject,
+    declare: this.translateDeclareObject,
   };
   private readonly isKey = (key: string): key is keyof typeof this.keyMap =>
     Object.hasOwn(this.keyMap, key);
@@ -123,10 +141,13 @@ const gen = new JestCodeGenerator();
 const test = new Translater(gen, obj as fileObject);
 console.log(test.getTranslatedCode());
 
+console.log("\njunit\n");
+
 const java = new JUnitCodeGenerator();
 const test2 = new Translater(java, obj as fileObject);
 console.log(test2.getTranslatedCode());
 
+console.log("\nunittest\n");
 const py = new UnittestCodeGenerator();
 const test3 = new Translater(py, obj as fileObject);
 console.log(test3.getTranslatedCode());

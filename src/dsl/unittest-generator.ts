@@ -21,4 +21,14 @@ export class UnittestCodeGenerator implements Generator {
   public generateFileCode = (name: string, statements: string[]) => {
     return `class ${name}(unittest.TestCase):\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
   };
+  public generateDeclareCode = (type: string, left: string) => {
+    return `let ${left}`;
+  };
+  public generateDeclareAndInitializeCode = (
+    type: string,
+    left: string,
+    right: string,
+  ) => {
+    return `const ${left} = ${right}`;
+  };
 }

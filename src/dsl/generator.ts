@@ -5,4 +5,10 @@ export interface Generator {
   generateAssertEqualCode: (target: string, tobe: string) => string;
   generateTestCaseCode: (name: string, statements: string[]) => string;
   generateFileCode: (name: string, statements: string[]) => string;
+  generateDeclareCode: (type: string, left: string) => string;
+  generateDeclareAndInitializeCode: (
+    type: string,
+    left: string,
+    right: string,
+  ) => string;
 }

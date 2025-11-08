@@ -18,6 +18,13 @@ export type callObject = {
   args: [];
 };
 
+export type declareObject = {
+  type: string;
+  data_type: string;
+  left: string;
+  right: string | callObject;
+};
+
 export type testCaseObject = {
   type: string;
   name: string;
