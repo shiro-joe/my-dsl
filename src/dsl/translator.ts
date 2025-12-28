@@ -20,7 +20,7 @@ const obj = JSON.parse(fs.readFileSync("./ir.json", "utf-8"));
 
 // 変換実行するクラス
 
-class Translater {
+class Translator {
   // コンストラクタ
   private generator: Generator;
   private object: fixtureObject;
@@ -151,16 +151,16 @@ class Translater {
 
 const gen = new JestCodeGenerator();
 
-const test = new Translater(gen, obj as fixtureObject);
+const test = new Translator(gen, obj as fixtureObject);
 console.log(test.getTranslatedCode());
 
 console.log("\njunit\n");
 
 const java = new JUnitCodeGenerator();
-const test2 = new Translater(java, obj as fixtureObject);
+const test2 = new Translator(java, obj as fixtureObject);
 console.log(test2.getTranslatedCode());
 
 console.log("\nunittest\n");
 const py = new UnittestCodeGenerator();
-const test3 = new Translater(py, obj as fixtureObject);
+const test3 = new Translator(py, obj as fixtureObject);
 console.log(test3.getTranslatedCode());
