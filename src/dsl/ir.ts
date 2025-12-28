@@ -1,23 +1,27 @@
 "use strict";
 
+// フィクスチャ
 export type fixtureObject = {
   type: string;
   name: string;
   statements: [];
 };
 
+// 代入※
 export type assignObject = {
   type: string;
   left: string;
   right: string | callObject;
 };
 
+// 呼び出し※
 export type callObject = {
   type: string;
   target: string;
   args: [];
 };
 
+// 宣言※
 export type declareObject = {
   type: string;
   data_type: string;
@@ -25,18 +29,21 @@ export type declareObject = {
   right: string | callObject;
 };
 
+// テストケース
 export type testCaseObject = {
   type: string;
   name: string;
   statements: [];
 };
 
+// toEqualアサーション
 export type assertEqualObject = {
   type: string;
   target: string | callObject;
   toEqual: string | callObject;
 };
 
+// セットアップ・ティアダウン
 export type setupTeardownObject = {
   type: string;
   name: string;
