@@ -1,7 +1,7 @@
 "use strict";
 
 // フィクスチャ
-export type fixtureObject = {
+export type fileObject = {
   type: string;
   name: string;
   statements: [];
@@ -44,11 +44,20 @@ export type assertEqualObject = {
 };
 
 // セットアップ・ティアダウン
-export type setupTeardownObject = {
-  type: string;
-  name: string;
-  statements: [];
+
+export type fixtureObject = {
+  beforeAll: { name: string; statements: [] };
+  beforeEach: { name: string; statements: [] };
+  afterAll: { name: string; statements: [] };
+  afterEach: { name: string; statements: [] };
 };
+
+// export type setupTeardownObject = {
+//   beforeAll: { name: string; statements: string[] };
+//   beforeEach: { name: string; statements: string[] };
+//   afterAll: { name: string; statements: string[] };
+//   afterEach: { name: string; statements: string[] };
+// };
 
 // enum TYPE {
 //   FILE = "fixture",

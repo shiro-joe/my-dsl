@@ -1,6 +1,6 @@
 {
-    "type" : "fixture",
-    "name" : "fixture name",
+    "type" : "file",
+    "name" : "file name",
     "statements" : [
         {
             "type" : "assign",
@@ -17,28 +17,42 @@
             }
         },
         {
-            "type" : "beforeAll",
-            "name" : "do this before all tests",
-            "statements" : [
-                {
-                    "type" : "assign",
-                    "left" : "y",
-                    "right" : {
-                        "type" : "call",
-                        "target" : "func",
-                        "args" : ["1", "3"]
+            "type": "fixture",
+            "beforeAll": {
+                "name": "",
+                "statements": [
+                    {
+                        "type" : "assign",
+                        "left" : "y",
+                        "right" : {
+                            "type" : "call",
+                            "target" : "func",
+                            "args" : ["1", "3"]
+                        }
+                    },
+                    {
+                        "type" : "assign",
+                        "left" : "y",
+                        "right" : {
+                            "type" : "call",
+                            "target" : "func",
+                            "args" : ["1", "3"]
+                        }
                     }
-                },
-                {
-                    "type" : "assign",
-                    "left" : "y",
-                    "right" : {
-                        "type" : "call",
-                        "target" : "func",
-                        "args" : ["1", "3"]
-                    }
-                }
-            ]
+                ]
+            },
+            "beforeEach": {
+                "name": "",
+                "statements":[]
+            },
+            "afterAll": {
+                "name": "",
+                "statements":[]
+            },
+            "afterEach": {
+                "name": "",
+                "statements":[]
+            }
         },
         {
             "type" : "testCase",

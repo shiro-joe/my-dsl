@@ -22,7 +22,7 @@ export class JUnitCodeGenerator implements Generator {
   ): string => {
     return `assertEquals(${toEqual}, ${target})`;
   };
-  public generateFixtureCode = (name: string, statements: string[]) => {
+  public generateFileCode = (name: string, statements: string[]) => {
     return `public class ${name} {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}}`;
   };
   public generateDeclareCode = (type: string, left: string) => {
@@ -36,23 +36,33 @@ export class JUnitCodeGenerator implements Generator {
     return `const ${left} = ${right}`;
   };
   public generateSetupTeardownCode = (
-    type: string,
-    _name: string,
-    statements: string[],
+    beforeAll: [name: string, statements: string[]],
+    beforeEach: [name: string, statements: string[]],
+    afterAll: [name: string, statements: string[]],
+    afterEach: [name: string, statements: string[]],
   ) => {
-    if (this.isKey(type)) {
-      return `@${this.keyMap[type][1]}\n${this.keyMap[type][0]}void ${type}() {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}}`;
-    } else {
-      return ``;
-    }
+    let res = "";
+    res += beforeAll[1].length
+      ? `@BeforeAll\nstatic void beforeAll() {\n${beforeAll[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`
+      : "";
+    res += beforeEach[1].length
+      ? `@BeforeEach\nvoid beforeEach() {${beforeEach[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`
+      : "";
+    res += afterAll[1].length
+      ? `@AfterAll\nstatic void afterAll() {\n${afterAll[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`
+      : "";
+    res += afterEach[1].length
+      ? `@AfterEach\n void afterEach() {\n${afterEach[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`
+      : "";
+    return res;
   };
 
-  private readonly keyMap = {
-    beforeAll: ["static ", "BeforeAll"],
-    beforeEach: ["", "BeforeEach"],
-    afterAll: ["static ", "AfterAll"],
-    afterEach: ["", "AfterEach"],
-  };
-  private readonly isKey = (key: string): key is keyof typeof this.keyMap =>
-    Object.hasOwn(this.keyMap, key);
+  // private readonly keyMap = {
+  //   beforeAll: ["static ", "BeforeAll"],
+  //   beforeEach: ["", "BeforeEach"],
+  //   afterAll: ["static ", "AfterAll"],
+  //   afterEach: ["", "AfterEach"],
+  // };
+  // private readonly isKey = (key: string): key is keyof typeof this.keyMap =>
+  //   Object.hasOwn(this.keyMap, key);
 }

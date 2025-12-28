@@ -2,16 +2,17 @@
 
 import type {
   callObject,
+  fileObject,
   fixtureObject,
   assignObject,
   testCaseObject,
   assertEqualObject,
   declareObject,
-  setupTeardownObject,
 } from "./ir.js";
 import { JestCodeGenerator } from "./jest-generator.js";
 import { JUnitCodeGenerator } from "./junit-generator.js";
 import { UnittestCodeGenerator } from "./unittest-generator.js";
+import { PytestCodeGenerator } from "./pytest-generator.js";
 import type { Generator } from "./generator.ts";
 
 import fs from "node:fs";
@@ -23,12 +24,12 @@ const obj = JSON.parse(fs.readFileSync("./ir.json", "utf-8"));
 class Translator {
   // コンストラクタ
   private generator: Generator;
-  private object: fixtureObject;
+  private object: fileObject;
   private translatedCode: string = "no result";
-  public constructor(generator: Generator, object: fixtureObject) {
+  public constructor(generator: Generator, object: fileObject) {
     this.generator = generator;
     this.object = object;
-    this.translatedCode = this.translateFixtureObject(this.object);
+    this.translatedCode = this.translateFileObject(this.object);
   }
 
   // 変換済みコード取得
@@ -52,18 +53,32 @@ class Translator {
     return res;
   };
 
-  // fixture
-  private readonly translateFixtureObject = (obj: fixtureObject) => {
+  // file
+  private readonly translateFileObject = (obj: fileObject) => {
     const res = this.translateStatementArray(obj.statements);
-    return this.generator.generateFixtureCode(obj.name, res);
+    return this.generator.generateFileCode(obj.name, res);
   };
 
   // setup/teardown
-  private readonly translateSetupTeardownObject = (
-    obj: setupTeardownObject,
-  ) => {
-    const res = this.translateStatementArray(obj.statements);
-    return this.generator.generateSetupTeardownCode(obj.type, obj.name, res);
+  private readonly translateSetupTeardownObject = (obj: fixtureObject) => {
+    return this.generator.generateSetupTeardownCode(
+      [
+        obj.beforeAll.name,
+        this.translateStatementArray(obj.beforeAll.statements),
+      ],
+      [
+        obj.beforeEach.name,
+        this.translateStatementArray(obj.beforeEach.statements),
+      ],
+      [
+        obj.afterAll.name,
+        this.translateStatementArray(obj.afterAll.statements),
+      ],
+      [
+        obj.afterEach.name,
+        this.translateStatementArray(obj.afterEach.statements),
+      ],
+    );
   };
 
   // test case
@@ -138,6 +153,7 @@ class Translator {
     testCase: this.translateTestCaseObject,
     assertEqual: this.translateAssertEqualObject,
     declare: this.translateDeclareObject,
+    fixture: this.translateSetupTeardownObject,
     beforeAll: this.translateSetupTeardownObject,
     beforeEach: this.translateSetupTeardownObject,
     afterAll: this.translateSetupTeardownObject,
@@ -151,16 +167,21 @@ class Translator {
 
 const gen = new JestCodeGenerator();
 
-const test = new Translator(gen, obj as fixtureObject);
+const test = new Translator(gen, obj as fileObject);
 console.log(test.getTranslatedCode());
 
 console.log("\njunit\n");
 
 const java = new JUnitCodeGenerator();
-const test2 = new Translator(java, obj as fixtureObject);
+const test2 = new Translator(java, obj as fileObject);
 console.log(test2.getTranslatedCode());
 
 console.log("\nunittest\n");
 const py = new UnittestCodeGenerator();
-const test3 = new Translator(py, obj as fixtureObject);
+const test3 = new Translator(py, obj as fileObject);
 console.log(test3.getTranslatedCode());
+
+console.log("\npytest\n");
+const pyte = new PytestCodeGenerator();
+const test4 = new Translator(pyte, obj as fileObject);
+console.log(test4.getTranslatedCode());
