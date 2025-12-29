@@ -24,6 +24,9 @@ export class PytestCodeGenerator implements Generator {
   ): string => {
     return `assert ${target} == ${toEqual}`;
   };
+  public generateAssertSameCode = (target: string, toEqual: string): string => {
+    return `assert ${target} is ${toEqual}`;
+  };
   public generateFileCode = (name: string, statements: string[]) => {
     return `class ${name}:\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
   };
@@ -43,8 +46,8 @@ export class PytestCodeGenerator implements Generator {
     afterAll: [name: string, statements: string[]],
     afterEach: [name: string, statements: string[]],
   ) => {
-    const suiteFx = `@pytest.fixture(scope="module", autouse=True)\ndef suite_fixture:\n${beforeAll[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}${this.INDENT}yield\n${afterAll[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
-    const caseFx = `@pytest.fixture(scope="function", autouse=True)\ndef suite_fixture:\n${beforeEach[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}${this.INDENT}yield\n${afterEach[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
+    const suiteFx = `@pytest.fixture(scope="module", autouse=True)\ndef suite_fixture():\n${beforeAll[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}${this.INDENT}yield\n${afterAll[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
+    const caseFx = `@pytest.fixture(scope="function", autouse=True)\ndef case_fixture():\n${beforeEach[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}${this.INDENT}yield\n${afterEach[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
     return suiteFx + caseFx;
   };
 }

@@ -49,6 +49,12 @@ export type assertEqualObject = {
   target: string | callObject;
   toEqual: string | callObject;
 };
+// toBeアサーション
+export type assertSameObject = {
+  type: string;
+  target: string | callObject;
+  toBe: string | callObject;
+};
 
 // セットアップ・ティアダウン
 

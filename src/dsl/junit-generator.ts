@@ -28,6 +28,9 @@ export class JUnitCodeGenerator implements Generator {
   ): string => {
     return `assertEquals(${toEqual}, ${target})`;
   };
+  public generateAssertSameCode = (target: string, toEqual: string): string => {
+    return `assertSame(${toEqual}, ${target})`;
+  };
   public generateFileCode = (name: string, statements: string[]) => {
     return `public class ${name} {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}}`;
   };
@@ -49,16 +52,16 @@ export class JUnitCodeGenerator implements Generator {
   ) => {
     let res = "";
     res += beforeAll[1].length
-      ? `@BeforeAll\nstatic void beforeAll() {\n${beforeAll[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`
+      ? `@BeforeAll\nstatic void beforeAll() {\n${beforeAll[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}}`
       : "";
     res += beforeEach[1].length
-      ? `@BeforeEach\nvoid beforeEach() {${beforeEach[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`
+      ? `@BeforeEach\nvoid beforeEach() {${beforeEach[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}}`
       : "";
     res += afterAll[1].length
-      ? `@AfterAll\nstatic void afterAll() {\n${afterAll[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`
+      ? `@AfterAll\nstatic void afterAll() {\n${afterAll[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}}`
       : "";
     res += afterEach[1].length
-      ? `@AfterEach\n void afterEach() {\n${afterEach[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`
+      ? `@AfterEach\n void afterEach() {\n${afterEach[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}}`
       : "";
     return res;
   };

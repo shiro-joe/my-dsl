@@ -9,6 +9,7 @@ import type {
   skippedTestCaseObject,
   assertEqualObject,
   declareObject,
+  assertSameObject,
 } from "./ir.js";
 import { JestCodeGenerator } from "./jest-generator.js";
 import { JUnitCodeGenerator } from "./junit-generator.js";
@@ -155,6 +156,22 @@ class Translator {
     return this.generator.generateAssertEqualCode(target, toEqual);
   };
 
+  // assert same 参照同一性
+  private translateAssertSameObject = (obj: assertSameObject) => {
+    let target: string, toBe: string;
+    if (typeof obj.target === "object") {
+      target = this.translateCallObject(obj.target);
+    } else {
+      target = obj.target;
+    }
+    if (typeof obj.toBe === "object") {
+      toBe = this.translateCallObject(obj.toBe);
+    } else {
+      toBe = obj.toBe;
+    }
+    return this.generator.generateAssertSameCode(target, toBe);
+  };
+
   // typeと関数の割り当て
   private readonly keyMap = {
     assign: this.translateAssignObject,
@@ -162,6 +179,7 @@ class Translator {
     testCase: this.translateTestCaseObject,
     skippedTestCase: this.translateSkippedTestCaseObject,
     assertEqual: this.translateAssertEqualObject,
+    assertSame: this.translateAssertSameObject,
     declare: this.translateDeclareObject,
     fixture: this.translateSetupTeardownObject,
     // beforeAll: this.translateSetupTeardownObject,

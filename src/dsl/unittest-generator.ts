@@ -24,6 +24,9 @@ export class UnittestCodeGenerator implements Generator {
   ): string => {
     return `self.assertEqual(${target}, ${toEqual})`;
   };
+  public generateAssertSameCode = (target: string, toEqual: string): string => {
+    return `self.assertIs(${target}, ${toEqual})`;
+  };
   public generateFileCode = (name: string, statements: string[]) => {
     return `class ${name}(unittest.TestCase):\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
   };

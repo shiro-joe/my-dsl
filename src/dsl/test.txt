@@ -1,0 +1,98 @@
+describe(file name, () => {
+    x = 2;
+    y = func(1, 3);
+    beforeAll(() = > {
+        y = func(1, 3);
+        y = func(1, 3);
+    });
+    test(test_1, () => {
+        expect(add(func(2, 10), 3)).toEqual(12);
+    });
+    test(test_2, () => {
+        const num = 0;
+        expect(mul(100, num)).toEqual(num);
+    });
+    test.skip(test_3, () => {
+        const num = 0;
+        expect(mul(100, num)).toBe(num);
+    });
+});
+
+junit
+
+public class file name {
+    x = 2;
+    y = func(1, 3);
+    @BeforeAll
+    static void beforeAll() {
+        y = func(1, 3);
+        y = func(1, 3);
+    };
+    @Test
+    public void test_1() {
+        assertEquals(12, add(func(2, 10), 3));
+    };
+    @Test
+    public void test_2() {
+        const num = 0;
+        assertEquals(num, mul(100, num));
+    };
+    @Disabled
+    @Test
+    public void test_3() {
+        const num = 0;
+        assertSame(num, mul(100, num));
+    };
+}
+
+unittest
+
+class file name(unittest.TestCase):
+    x = 2
+    y = func(1, 3)
+    @classmethod
+    def setUpClass(cls):
+        y = func(1, 3)
+        y = func(1, 3)
+    
+    def test_1(self):
+        self.assertEqual(add(func(2, 10), 3), 12)
+    
+    def test_2(self):
+        const num = 0
+        self.assertEqual(mul(100, num), num)
+    
+    @unittest.skip("skip")
+    def test_3(self):
+        const num = 0
+        self.assertIs(mul(100, num), num)
+    
+
+
+pytest
+
+class file name:
+    x = 2
+    y = func(1, 3)
+    @pytest.fixture(scope="module", autouse=True)
+    def suite_fixture():
+        y = func(1, 3)
+        y = func(1, 3)
+        yield
+    @pytest.fixture(scope="function", autouse=True)
+    def case_fixture():
+        yield
+    
+    def test_1(self):
+        assert add(func(2, 10), 3) == 12
+    
+    def test_2(self):
+        const num = 0
+        assert mul(100, num) == num
+    
+    @pytest.mark.skip
+    def test_3(self):
+        const num = 0
+        assert mul(100, num) is num
+    
+

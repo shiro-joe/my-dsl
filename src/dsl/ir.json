@@ -71,7 +71,7 @@
                             }, 3
                         ]
                     },
-                    "tobe" : "12"
+                    "toEqual" : "12"
                 }
             ]
         },
@@ -91,7 +91,7 @@
                         "target" : "mul",
                         "args" : ["100", "num"]
                     },
-                    "tobe" : "num"
+                    "toEqual" : "num"
                 }
             ]
         },
@@ -105,13 +105,13 @@
                     "right": "0"
                 },
                 {
-                    "type" : "assertEqual",
+                    "type" : "assertSame",
                     "target" : {
                         "type" : "call",
                         "target" : "mul",
                         "args" : ["100", "num"]
                     },
-                    "tobe" : "num"
+                    "toBe" : "num"
                 }
             ]
         }
