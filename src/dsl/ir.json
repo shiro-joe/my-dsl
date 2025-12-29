@@ -94,6 +94,26 @@
                     "tobe" : "num"
                 }
             ]
+        },
+        {
+            "type" : "skippedTestCase",
+            "name" : "test_3",
+            "statements" : [
+                {
+                    "type": "declare",
+                    "left": "num",
+                    "right": "0"
+                },
+                {
+                    "type" : "assertEqual",
+                    "target" : {
+                        "type" : "call",
+                        "target" : "mul",
+                        "args" : ["100", "num"]
+                    },
+                    "tobe" : "num"
+                }
+            ]
         }
     ]
 }

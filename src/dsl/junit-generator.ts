@@ -16,6 +16,12 @@ export class JUnitCodeGenerator implements Generator {
   ): string => {
     return `@Test\npublic void ${name}() {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}}`;
   };
+  public generateSkippedTestCaseCode = (
+    name: string,
+    statements: string[],
+  ): string => {
+    return `@Disabled\n@Test\npublic void ${name}() {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}}`;
+  };
   public generateAssertEqualCode = (
     target: string,
     toEqual: string,

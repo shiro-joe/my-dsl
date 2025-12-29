@@ -6,6 +6,7 @@ import type {
   fixtureObject,
   assignObject,
   testCaseObject,
+  skippedTestCaseObject,
   assertEqualObject,
   declareObject,
 } from "./ir.js";
@@ -87,6 +88,14 @@ class Translator {
     return this.generator.generateTestCaseCode(obj.name, res);
   };
 
+  // skip test case
+  private readonly translateSkippedTestCaseObject = (
+    obj: skippedTestCaseObject,
+  ) => {
+    const res = this.translateStatementArray(obj.statements);
+    return this.generator.generateSkippedTestCaseCode(obj.name, res);
+  };
+
   // assign
   private readonly translateAssignObject = (obj: assignObject) => {
     const left: string = obj.left;
@@ -151,13 +160,14 @@ class Translator {
     assign: this.translateAssignObject,
     call: this.translateCallObject,
     testCase: this.translateTestCaseObject,
+    skippedTestCase: this.translateSkippedTestCaseObject,
     assertEqual: this.translateAssertEqualObject,
     declare: this.translateDeclareObject,
     fixture: this.translateSetupTeardownObject,
-    beforeAll: this.translateSetupTeardownObject,
-    beforeEach: this.translateSetupTeardownObject,
-    afterAll: this.translateSetupTeardownObject,
-    afterEach: this.translateSetupTeardownObject,
+    // beforeAll: this.translateSetupTeardownObject,
+    // beforeEach: this.translateSetupTeardownObject,
+    // afterAll: this.translateSetupTeardownObject,
+    // afterEach: this.translateSetupTeardownObject,
   };
   private readonly isKey = (key: string): key is keyof typeof this.keyMap =>
     Object.hasOwn(this.keyMap, key);

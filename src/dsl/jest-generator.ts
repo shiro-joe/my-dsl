@@ -17,6 +17,9 @@ export class JestCodeGenerator implements Generator {
   ): string => {
     return `test(${name}, () => {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`;
   };
+  public generateSkippedTestCaseCode = (name: string, statements: string[]) => {
+    return `test.skip(${name}, () => {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`;
+  };
   public generateAssertEqualCode = (
     target: string,
     toEqual: string,

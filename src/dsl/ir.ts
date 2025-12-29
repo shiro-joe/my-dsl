@@ -36,6 +36,13 @@ export type testCaseObject = {
   statements: [];
 };
 
+// skip
+export type skippedTestCaseObject = {
+  type: string;
+  name: string;
+  statements: [];
+};
+
 // toEqualアサーション
 export type assertEqualObject = {
   type: string;

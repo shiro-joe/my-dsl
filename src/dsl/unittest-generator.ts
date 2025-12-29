@@ -15,6 +15,9 @@ export class UnittestCodeGenerator implements Generator {
   public generateTestCaseCode = (name: string, statements: string[]) => {
     return `def ${name}(self):\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
   };
+  public generateSkippedTestCaseCode = (name: string, statements: string[]) => {
+    return `@unittest.skip("skip")\ndef ${name}(self):\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
+  };
   public generateAssertEqualCode = (
     target: string,
     toEqual: string,
