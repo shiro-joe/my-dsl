@@ -1,59 +1,69 @@
 "use strict";
 
 // フィクスチャ
-export type fileObject = {
+export type FileObject = {
   type: string;
   name: string;
   statements: [];
 };
 
 // 代入※
-export type assignObject = {
+export type AssignObject = {
   type: string;
   left: string;
-  right: string | callObject;
+  right: string | CallObject;
 };
 
 // 呼び出し※
-export type callObject = {
+export type CallObject = {
   type: string;
   target: string;
   args: [];
 };
 
 // 宣言※
-export type declareObject = {
+export type DeclareObject = {
   type: string;
   data_type: string;
   left: string;
-  right: string | callObject;
+  right: string | CallObject;
 };
 
 // テストケース
-export type testCaseObject = {
+export type TestCaseObject = {
   type: string;
   name: string;
   statements: [];
 };
 
 // skip
-export type skippedTestCaseObject = {
+export type SkippedTestCaseObject = {
   type: string;
   name: string;
   statements: [];
 };
 
 // toEqualアサーション
-export type assertEqualObject = {
+export type AssertEqualObject = {
   type: string;
-  target: string | callObject;
-  toEqual: string | callObject;
+  target: string | CallObject;
+  toEqual: string | CallObject;
 };
 // toBeアサーション
-export type assertSameObject = {
+export type AssertSameObject = {
   type: string;
-  target: string | callObject;
-  toBe: string | callObject;
+  target: string | CallObject;
+  toBe: string | CallObject;
+};
+// toBeTruthy
+export type AssertTrueObject = {
+  type: string;
+  target: string;
+};
+// toBeFalsy
+export type AssertFalseObject = {
+  type: string;
+  target: string;
 };
 
 // セットアップ・ティアダウン
@@ -89,16 +99,16 @@ export type fixtureObject = {
 // export type assignObject = {
 //   type: TYPE.ASSIGN;
 //   left: string;
-//   right: string | callObject;
+//   right: string | CallObject;
 // };
 
-// export type callObject = {
+// export type CallObject = {
 //   type: TYPE.CALL;
 //   target: string;
 //   args: [];
 // };
 
-// export type testCaseObject = {
+// export type TestCaseObject = {
 //   type: TYPE.TEST_CASE;
 //   name: string;
 //   statements: [];
@@ -106,6 +116,6 @@ export type fixtureObject = {
 
 // export type assertEqualObject = {
 //   type: TYPE.ASSERT_EQUAL;
-//   target: string | callObject;
-//   tobe: string | callObject;
+//   target: string | CallObject;
+//   tobe: string | CallObject;
 // };

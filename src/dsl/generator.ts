@@ -4,6 +4,8 @@ export interface Generator {
   generateCallCode: (target: string, args: string[]) => string;
   generateAssertEqualCode: (target: string, tobe: string) => string;
   generateAssertSameCode: (target: string, tobe: string) => string;
+  generateAssertTrueCode: (target: string) => string;
+  generateAssertFalseCode: (target: string) => string;
   generateTestCaseCode: (name: string, statements: string[]) => string;
   generateSkippedTestCaseCode: (name: string, statements: string[]) => string;
   generateFileCode: (name: string, statements: string[]) => string;

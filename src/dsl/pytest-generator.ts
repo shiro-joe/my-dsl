@@ -27,6 +27,12 @@ export class PytestCodeGenerator implements Generator {
   public generateAssertSameCode = (target: string, toEqual: string): string => {
     return `assert ${target} is ${toEqual}`;
   };
+  public generateAssertTrueCode = (target: string) => {
+    return `assert ${target}`;
+  };
+  public generateAssertFalseCode = (target: string) => {
+    return `assert not ${target}`;
+  };
   public generateFileCode = (name: string, statements: string[]) => {
     return `class ${name}:\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
   };

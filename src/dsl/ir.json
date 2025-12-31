@@ -114,6 +114,24 @@
                     "toBe" : "num"
                 }
             ]
+        },
+        {
+            "type" : "testCase",
+            "name" : "test_4",
+            "statements" : [
+                {
+                    "type": "assertTrue",
+                    "target": "x"
+                },
+                {
+                    "type" : "assertFalse",
+                    "target" : {
+                        "type" : "call",
+                        "target" : "mul",
+                        "args" : ["100", "num"]
+                    }
+                }
+            ]
         }
     ]
 }

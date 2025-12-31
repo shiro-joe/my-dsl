@@ -29,6 +29,12 @@ export class JestCodeGenerator implements Generator {
   public generateAssertSameCode = (target: string, toEqual: string): string => {
     return `expect(${target}).toBe(${toEqual})`;
   };
+  public generateAssertTrueCode = (target: string) => {
+    return `expect(${target}).toBe(true)`;
+  };
+  public generateAssertFalseCode = (target: string) => {
+    return `expect(${target}).toBe(false)`;
+  };
   public generateFileCode = (name: string, statements: string[]) => {
     return `describe(${name}, () => {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}});`;
   };

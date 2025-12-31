@@ -31,6 +31,12 @@ export class JUnitCodeGenerator implements Generator {
   public generateAssertSameCode = (target: string, toEqual: string): string => {
     return `assertSame(${toEqual}, ${target})`;
   };
+  public generateAssertTrueCode = (target: string) => {
+    return `assertTrue(${target})`;
+  };
+  public generateAssertFalseCode = (target: string) => {
+    return `assertFalse(${target})`;
+  };
   public generateFileCode = (name: string, statements: string[]) => {
     return `public class ${name} {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}}`;
   };

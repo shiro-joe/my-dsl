@@ -1,15 +1,17 @@
 "use strict";
 
 import type {
-  callObject,
-  fileObject,
+  CallObject,
+  FileObject,
   fixtureObject,
-  assignObject,
-  testCaseObject,
-  skippedTestCaseObject,
-  assertEqualObject,
-  declareObject,
-  assertSameObject,
+  AssignObject,
+  TestCaseObject,
+  SkippedTestCaseObject,
+  AssertEqualObject,
+  DeclareObject,
+  AssertSameObject,
+  AssertFalseObject,
+  AssertTrueObject,
 } from "./ir.js";
 import { JestCodeGenerator } from "./jest-generator.js";
 import { JUnitCodeGenerator } from "./junit-generator.js";
@@ -26,9 +28,9 @@ const obj = JSON.parse(fs.readFileSync("./ir.json", "utf-8"));
 class Translator {
   // コンストラクタ
   private generator: Generator;
-  private object: fileObject;
+  private object: FileObject;
   private translatedCode: string = "no result";
-  public constructor(generator: Generator, object: fileObject) {
+  public constructor(generator: Generator, object: FileObject) {
     this.generator = generator;
     this.object = object;
     this.translatedCode = this.translateFileObject(this.object);
@@ -56,7 +58,7 @@ class Translator {
   };
 
   // file
-  private readonly translateFileObject = (obj: fileObject) => {
+  private readonly translateFileObject = (obj: FileObject) => {
     const res = this.translateStatementArray(obj.statements);
     return this.generator.generateFileCode(obj.name, res);
   };
@@ -84,21 +86,21 @@ class Translator {
   };
 
   // test case
-  private readonly translateTestCaseObject = (obj: testCaseObject) => {
+  private readonly translateTestCaseObject = (obj: TestCaseObject) => {
     const res = this.translateStatementArray(obj.statements);
     return this.generator.generateTestCaseCode(obj.name, res);
   };
 
   // skip test case
   private readonly translateSkippedTestCaseObject = (
-    obj: skippedTestCaseObject,
+    obj: SkippedTestCaseObject,
   ) => {
     const res = this.translateStatementArray(obj.statements);
     return this.generator.generateSkippedTestCaseCode(obj.name, res);
   };
 
   // assign
-  private readonly translateAssignObject = (obj: assignObject) => {
+  private readonly translateAssignObject = (obj: AssignObject) => {
     const left: string = obj.left;
     let right: string;
     if (typeof obj.right === "object") {
@@ -110,7 +112,7 @@ class Translator {
   };
 
   // call
-  private translateCallObject = (obj: callObject) => {
+  private translateCallObject = (obj: CallObject) => {
     const args: string[] = [];
     const target = obj.target;
     for (const arg of obj.args) {
@@ -124,7 +126,7 @@ class Translator {
   };
 
   // declare
-  private translateDeclareObject = (obj: declareObject) => {
+  private translateDeclareObject = (obj: DeclareObject) => {
     const type = obj.data_type;
     const left = obj.left;
     let right;
@@ -141,7 +143,7 @@ class Translator {
   };
 
   // assert equal
-  private translateAssertEqualObject = (obj: assertEqualObject) => {
+  private translateAssertEqualObject = (obj: AssertEqualObject) => {
     let target: string, toEqual: string;
     if (typeof obj.target === "object") {
       target = this.translateCallObject(obj.target);
@@ -157,7 +159,7 @@ class Translator {
   };
 
   // assert same 参照同一性
-  private translateAssertSameObject = (obj: assertSameObject) => {
+  private translateAssertSameObject = (obj: AssertSameObject) => {
     let target: string, toBe: string;
     if (typeof obj.target === "object") {
       target = this.translateCallObject(obj.target);
@@ -172,6 +174,26 @@ class Translator {
     return this.generator.generateAssertSameCode(target, toBe);
   };
 
+  // assert t/f
+  private translateAssertTrueObject = (obj: AssertTrueObject) => {
+    let target: string;
+    if (typeof obj.target === "object") {
+      target = this.translateCallObject(obj.target);
+    } else {
+      target = obj.target;
+    }
+    return this.generator.generateAssertTrueCode(target);
+  };
+  private translateAssertFalseObject = (obj: AssertFalseObject) => {
+    let target: string;
+    if (typeof obj.target === "object") {
+      target = this.translateCallObject(obj.target);
+    } else {
+      target = obj.target;
+    }
+    return this.generator.generateAssertFalseCode(target);
+  };
+
   // typeと関数の割り当て
   private readonly keyMap = {
     assign: this.translateAssignObject,
@@ -180,6 +202,8 @@ class Translator {
     skippedTestCase: this.translateSkippedTestCaseObject,
     assertEqual: this.translateAssertEqualObject,
     assertSame: this.translateAssertSameObject,
+    assertTrue: this.translateAssertTrueObject,
+    assertFalse: this.translateAssertFalseObject,
     declare: this.translateDeclareObject,
     fixture: this.translateSetupTeardownObject,
     // beforeAll: this.translateSetupTeardownObject,
@@ -195,21 +219,21 @@ class Translator {
 
 const gen = new JestCodeGenerator();
 
-const test = new Translator(gen, obj as fileObject);
+const test = new Translator(gen, obj as FileObject);
 console.log(test.getTranslatedCode());
 
 console.log("\njunit\n");
 
 const java = new JUnitCodeGenerator();
-const test2 = new Translator(java, obj as fileObject);
+const test2 = new Translator(java, obj as FileObject);
 console.log(test2.getTranslatedCode());
 
 console.log("\nunittest\n");
 const py = new UnittestCodeGenerator();
-const test3 = new Translator(py, obj as fileObject);
+const test3 = new Translator(py, obj as FileObject);
 console.log(test3.getTranslatedCode());
 
 console.log("\npytest\n");
 const pyte = new PytestCodeGenerator();
-const test4 = new Translator(pyte, obj as fileObject);
+const test4 = new Translator(pyte, obj as FileObject);
 console.log(test4.getTranslatedCode());
