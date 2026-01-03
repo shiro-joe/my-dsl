@@ -21,7 +21,11 @@ export class PytestCodeGenerator implements Generator {
   public generateAssertEqualCode = (
     target: string,
     toEqual: string,
+    delta: number,
   ): string => {
+    if (delta) {
+      return `assert ${target} == pytest.approx(${toEqual}, abs=1e-${delta})`;
+    }
     return `assert ${target} == ${toEqual}`;
   };
   public generateAssertSameCode = (target: string, toEqual: string): string => {
@@ -32,6 +36,9 @@ export class PytestCodeGenerator implements Generator {
   };
   public generateAssertFalseCode = (target: string) => {
     return `assert not ${target}`;
+  };
+  public generateAssertNullCode = (target: string) => {
+    return `assert ${target} is None`;
   };
   public generateFileCode = (name: string, statements: string[]) => {
     return `class ${name}:\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;

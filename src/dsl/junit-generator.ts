@@ -25,7 +25,11 @@ export class JUnitCodeGenerator implements Generator {
   public generateAssertEqualCode = (
     target: string,
     toEqual: string,
+    delta: number,
   ): string => {
+    if (delta) {
+      return `assertEquals(${toEqual}, ${target}, 1e-${delta})`;
+    }
     return `assertEquals(${toEqual}, ${target})`;
   };
   public generateAssertSameCode = (target: string, toEqual: string): string => {
@@ -36,6 +40,9 @@ export class JUnitCodeGenerator implements Generator {
   };
   public generateAssertFalseCode = (target: string) => {
     return `assertFalse(${target})`;
+  };
+  public generateAssertNullCode = (target: string) => {
+    return `assertNull(${target})`;
   };
   public generateFileCode = (name: string, statements: string[]) => {
     return `public class ${name} {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}}`;

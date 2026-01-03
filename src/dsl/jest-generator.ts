@@ -23,7 +23,11 @@ export class JestCodeGenerator implements Generator {
   public generateAssertEqualCode = (
     target: string,
     toEqual: string,
+    delta: number,
   ): string => {
+    if (delta) {
+      return `expect(${target}).toBeCloseTo(${toEqual}, ${delta})`;
+    }
     return `expect(${target}).toEqual(${toEqual})`;
   };
   public generateAssertSameCode = (target: string, toEqual: string): string => {
@@ -34,6 +38,9 @@ export class JestCodeGenerator implements Generator {
   };
   public generateAssertFalseCode = (target: string) => {
     return `expect(${target}).toBe(false)`;
+  };
+  public generateAssertNullCode = (target: string) => {
+    return `expect(${target}).toBeNull()`;
   };
   public generateFileCode = (name: string, statements: string[]) => {
     return `describe(${name}, () => {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}});`;

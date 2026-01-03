@@ -21,7 +21,11 @@ export class UnittestCodeGenerator implements Generator {
   public generateAssertEqualCode = (
     target: string,
     toEqual: string,
+    delta: number,
   ): string => {
+    if (delta) {
+      return `self.assertAlmostEqual(${target}, ${toEqual}, places=${delta})`;
+    }
     return `self.assertEqual(${target}, ${toEqual})`;
   };
   public generateAssertSameCode = (target: string, toEqual: string): string => {
@@ -32,6 +36,9 @@ export class UnittestCodeGenerator implements Generator {
   };
   public generateAssertFalseCode = (target: string) => {
     return `self.assertFalse(${target})`;
+  };
+  public generateAssertNullCode = (target: string) => {
+    return `self.assertIsNone(${target})`;
   };
   public generateFileCode = (name: string, statements: string[]) => {
     return `class ${name}(unittest.TestCase):\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;

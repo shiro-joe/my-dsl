@@ -132,6 +132,26 @@
                     }
                 }
             ]
+        },
+        {
+            "type" : "testCase",
+            "name" : "test_5",
+            "statements" : [
+                {
+                    "type": "assertNull",
+                    "target": "x"
+                },
+                {
+                    "type" : "assertEqual",
+                    "target" : {
+                        "type" : "call",
+                        "target" : "mul",
+                        "args" : ["100", "num"]
+                    },
+                    "toEqual" : "199",
+                    "delta": "6"
+                }
+            ]
         }
     ]
 }

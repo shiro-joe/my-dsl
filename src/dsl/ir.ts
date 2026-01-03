@@ -48,6 +48,7 @@ export type AssertEqualObject = {
   type: string;
   target: string | CallObject;
   toEqual: string | CallObject;
+  delta: string;
 };
 // toBeアサーション
 export type AssertSameObject = {
@@ -62,6 +63,12 @@ export type AssertTrueObject = {
 };
 // toBeFalsy
 export type AssertFalseObject = {
+  type: string;
+  target: string;
+};
+
+// null
+export type AssertNullObject = {
   type: string;
   target: string;
 };

@@ -16,6 +16,14 @@ describe(file name, () => {
         const num = 0;
         expect(mul(100, num)).toBe(num);
     });
+    test(test_4, () => {
+        expect(x).toBe(true);
+        expect(mul(100, num)).toBe(false);
+    });
+    test(test_5, () => {
+        expect(x).toBeNull();
+        expect(mul(100, num)).toBeCloseTo(199, 6);
+    });
 });
 
 junit
@@ -43,6 +51,16 @@ public class file name {
         const num = 0;
         assertSame(num, mul(100, num));
     };
+    @Test
+    public void test_4() {
+        assertTrue(x);
+        assertFalse(mul(100, num));
+    };
+    @Test
+    public void test_5() {
+        assertNull(x);
+        assertEquals(199, mul(100, num), 1e-6);
+    };
 }
 
 unittest
@@ -66,6 +84,14 @@ class file name(unittest.TestCase):
     def test_3(self):
         const num = 0
         self.assertIs(mul(100, num), num)
+    
+    def test_4(self):
+        self.assertTrue(x)
+        self.assertFalse(mul(100, num))
+    
+    def test_5(self):
+        self.assertIsNone(x)
+        self.assertAlmostEqual(mul(100, num), 199, places=6)
     
 
 
@@ -94,5 +120,13 @@ class file name:
     def test_3(self):
         const num = 0
         assert mul(100, num) is num
+    
+    def test_4(self):
+        assert x
+        assert not mul(100, num)
+    
+    def test_5(self):
+        assert x is None
+        assert mul(100, num) == pytest.approx(199, abs=1e-6)
     
 
