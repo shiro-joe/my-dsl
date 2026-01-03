@@ -24,6 +24,10 @@ describe(file name, () => {
         expect(x).toBeNull();
         expect(mul(100, num)).toBeCloseTo(199, 6);
     });
+    test(test_6, () => {
+        expect(x).toThrow(Error);
+        expect(mul(100, num)).toThrow();
+    });
 });
 
 junit
@@ -61,6 +65,11 @@ public class file name {
         assertNull(x);
         assertEquals(199, mul(100, num), 1e-6);
     };
+    @Test
+    public void test_6() {
+        assertThrows(Error, x);
+        assertThrows(Exception.class, mul(100, num));
+    };
 }
 
 unittest
@@ -92,6 +101,12 @@ class file name(unittest.TestCase):
     def test_5(self):
         self.assertIsNone(x)
         self.assertAlmostEqual(mul(100, num), 199, places=6)
+    
+    def test_6(self):
+        with self.assertRaises(Error):
+            raise x
+        with self.assertRaises(Exception): 
+            raise mul(100, num)
     
 
 
@@ -128,5 +143,11 @@ class file name:
     def test_5(self):
         assert x is None
         assert mul(100, num) == pytest.approx(199, abs=1e-6)
+    
+    def test_6(self):
+        with pytest.raises(Error):
+            raise x
+        with pytest.raises(Exception):
+            raise mul(100, num)
     
 

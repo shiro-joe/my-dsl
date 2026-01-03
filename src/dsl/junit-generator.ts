@@ -44,6 +44,12 @@ export class JUnitCodeGenerator implements Generator {
   public generateAssertNullCode = (target: string) => {
     return `assertNull(${target})`;
   };
+  public generateAssertThrowCode = (target: string, error: string) => {
+    if (error) {
+      return `assertThrows(${error}, ${target})`;
+    }
+    return `assertThrows(Exception.class, ${target})`;
+  };
   public generateFileCode = (name: string, statements: string[]) => {
     return `public class ${name} {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}}`;
   };

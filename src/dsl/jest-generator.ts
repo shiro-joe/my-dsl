@@ -42,6 +42,12 @@ export class JestCodeGenerator implements Generator {
   public generateAssertNullCode = (target: string) => {
     return `expect(${target}).toBeNull()`;
   };
+  public generateAssertThrowCode = (target: string, error: string) => {
+    if (error) {
+      return `expect(${target}).toThrow(${error})`;
+    }
+    return `expect(${target}).toThrow()`;
+  };
   public generateFileCode = (name: string, statements: string[]) => {
     return `describe(${name}, () => {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}});`;
   };

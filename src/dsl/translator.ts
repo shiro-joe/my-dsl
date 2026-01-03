@@ -13,6 +13,7 @@ import type {
   AssertFalseObject,
   AssertTrueObject,
   AssertNullObject,
+  AssertThrowObject,
 } from "./ir.js";
 import { JestCodeGenerator } from "./jest-generator.js";
 import { JUnitCodeGenerator } from "./junit-generator.js";
@@ -207,6 +208,17 @@ class Translator {
     return this.generator.generateAssertNullCode(target);
   };
 
+  // 例外
+  private translateAssertThrowObject = (obj: AssertThrowObject) => {
+    let target: string;
+    if (typeof obj.target === "object") {
+      target = this.translateCallObject(obj.target);
+    } else {
+      target = obj.target;
+    }
+    return this.generator.generateAssertThrowCode(target, obj.error);
+  };
+
   // typeと関数の割り当て
   private readonly keyMap = {
     assign: this.translateAssignObject,
@@ -218,6 +230,7 @@ class Translator {
     assertTrue: this.translateAssertTrueObject,
     assertFalse: this.translateAssertFalseObject,
     assertNull: this.translateAssertNullObject,
+    assertThrow: this.translateAssertThrowObject,
     declare: this.translateDeclareObject,
     fixture: this.translateSetupTeardownObject,
     // beforeAll: this.translateSetupTeardownObject,

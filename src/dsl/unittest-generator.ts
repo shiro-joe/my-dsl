@@ -40,6 +40,12 @@ export class UnittestCodeGenerator implements Generator {
   public generateAssertNullCode = (target: string) => {
     return `self.assertIsNone(${target})`;
   };
+  public generateAssertThrowCode = (target: string, error: string) => {
+    if (error) {
+      return `with self.assertRaises(${error}):\n${this.INDENT}raise ${target}`;
+    }
+    return `with self.assertRaises(Exception): \n${this.INDENT}raise ${target}`;
+  };
   public generateFileCode = (name: string, statements: string[]) => {
     return `class ${name}(unittest.TestCase):\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
   };

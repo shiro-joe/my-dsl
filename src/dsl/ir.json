@@ -152,6 +152,25 @@
                     "delta": "6"
                 }
             ]
+        },
+        {
+            "type" : "testCase",
+            "name" : "test_6",
+            "statements" : [
+                {
+                    "type": "assertThrow",
+                    "target": "x",
+                    "error": "Error"
+                },
+                {
+                    "type" : "assertThrow",
+                    "target" : {
+                        "type" : "call",
+                        "target" : "mul",
+                        "args" : ["100", "num"]
+                    }
+                }
+            ]
         }
     ]
 }

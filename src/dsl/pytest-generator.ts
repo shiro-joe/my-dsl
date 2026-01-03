@@ -40,6 +40,12 @@ export class PytestCodeGenerator implements Generator {
   public generateAssertNullCode = (target: string) => {
     return `assert ${target} is None`;
   };
+  public generateAssertThrowCode = (target: string, error: string) => {
+    if (error) {
+      return `with pytest.raises(${error}):\n${this.INDENT}raise ${target}`;
+    }
+    return `with pytest.raises(Exception):\n${this.INDENT}raise ${target}`;
+  };
   public generateFileCode = (name: string, statements: string[]) => {
     return `class ${name}:\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
   };

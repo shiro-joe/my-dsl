@@ -11,6 +11,7 @@ export interface Generator {
   generateAssertTrueCode: (target: string) => string;
   generateAssertFalseCode: (target: string) => string;
   generateAssertNullCode: (target: string) => string;
+  generateAssertThrowCode: (target: string, error: string) => string;
   generateTestCaseCode: (name: string, statements: string[]) => string;
   generateSkippedTestCaseCode: (name: string, statements: string[]) => string;
   generateFileCode: (name: string, statements: string[]) => string;

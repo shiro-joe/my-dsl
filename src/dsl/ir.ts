@@ -73,6 +73,13 @@ export type AssertNullObject = {
   target: string;
 };
 
+// 例外
+export type AssertThrowObject = {
+  type: string;
+  target: string;
+  error: string;
+};
+
 // セットアップ・ティアダウン
 
 export type fixtureObject = {
