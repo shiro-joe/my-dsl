@@ -17,13 +17,38 @@ export class JestCodeGenerator implements Generator {
   ): string => {
     return `test(${name}, () => {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`;
   };
+  public generateSkippedTestCaseCode = (name: string, statements: string[]) => {
+    return `test.skip(${name}, () => {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`;
+  };
   public generateAssertEqualCode = (
     target: string,
     toEqual: string,
+    delta: number,
   ): string => {
+    if (delta) {
+      return `expect(${target}).toBeCloseTo(${toEqual}, ${delta})`;
+    }
     return `expect(${target}).toEqual(${toEqual})`;
   };
-  public generateFixtureCode = (name: string, statements: string[]) => {
+  public generateAssertSameCode = (target: string, toEqual: string): string => {
+    return `expect(${target}).toBe(${toEqual})`;
+  };
+  public generateAssertTrueCode = (target: string) => {
+    return `expect(${target}).toBe(true)`;
+  };
+  public generateAssertFalseCode = (target: string) => {
+    return `expect(${target}).toBe(false)`;
+  };
+  public generateAssertNullCode = (target: string) => {
+    return `expect(${target}).toBeNull()`;
+  };
+  public generateAssertThrowCode = (target: string, error: string) => {
+    if (error) {
+      return `expect(${target}).toThrow(${error})`;
+    }
+    return `expect(${target}).toThrow()`;
+  };
+  public generateFileCode = (name: string, statements: string[]) => {
     return `describe(${name}, () => {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}});`;
   };
   public generateDeclareCode = (type: string, left: string) => {
@@ -37,11 +62,25 @@ export class JestCodeGenerator implements Generator {
     return `const ${left} = ${right}`;
   };
   public generateSetupTeardownCode = (
-    type: string,
-    _name: string,
-    statements: string[],
+    beforeAll: [name: string, statements: string[]],
+    beforeEach: [name: string, statements: string[]],
+    afterAll: [name: string, statements: string[]],
+    afterEach: [name: string, statements: string[]],
   ) => {
-    return `${type}(() = > {\n${statements.map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`;
+    let res = "";
+    res += beforeAll[1].length
+      ? `beforeAll(() = > {\n${beforeAll[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`
+      : "";
+    res += beforeEach[1].length
+      ? `beforeEach(() = > {\n${beforeEach[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`
+      : "";
+    res += afterAll[1].length
+      ? `afterAll(() = > {\n${afterAll[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`
+      : "";
+    res += afterEach[1].length
+      ? `afterEach(() = > {\n${afterEach[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`
+      : "";
+    return res;
   };
 }
 export {};

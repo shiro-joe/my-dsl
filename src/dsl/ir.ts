@@ -1,47 +1,100 @@
 "use strict";
 
-export type fixtureObject = {
+// フィクスチャ
+export type FileObject = {
   type: string;
   name: string;
   statements: [];
 };
 
-export type assignObject = {
+// 代入※
+export type AssignObject = {
   type: string;
   left: string;
-  right: string | callObject;
+  right: string | CallObject;
 };
 
-export type callObject = {
+// 呼び出し※
+export type CallObject = {
   type: string;
   target: string;
   args: [];
 };
 
-export type declareObject = {
+// 宣言※
+export type DeclareObject = {
   type: string;
   data_type: string;
   left: string;
-  right: string | callObject;
+  right: string | CallObject;
 };
 
-export type testCaseObject = {
+// テストケース
+export type TestCaseObject = {
   type: string;
   name: string;
   statements: [];
 };
 
-export type assertEqualObject = {
-  type: string;
-  target: string | callObject;
-  toEqual: string | callObject;
-};
-
-export type setupTeardownObject = {
+// skip
+export type SkippedTestCaseObject = {
   type: string;
   name: string;
   statements: [];
 };
+
+// toEqualアサーション
+export type AssertEqualObject = {
+  type: string;
+  target: string | CallObject;
+  toEqual: string | CallObject;
+  delta: string;
+};
+// toBeアサーション
+export type AssertSameObject = {
+  type: string;
+  target: string | CallObject;
+  toBe: string | CallObject;
+};
+// toBeTruthy
+export type AssertTrueObject = {
+  type: string;
+  target: string;
+};
+// toBeFalsy
+export type AssertFalseObject = {
+  type: string;
+  target: string;
+};
+
+// null
+export type AssertNullObject = {
+  type: string;
+  target: string;
+};
+
+// 例外
+export type AssertThrowObject = {
+  type: string;
+  target: string;
+  error: string;
+};
+
+// セットアップ・ティアダウン
+
+export type fixtureObject = {
+  beforeAll: { name: string; statements: [] };
+  beforeEach: { name: string; statements: [] };
+  afterAll: { name: string; statements: [] };
+  afterEach: { name: string; statements: [] };
+};
+
+// export type setupTeardownObject = {
+//   beforeAll: { name: string; statements: string[] };
+//   beforeEach: { name: string; statements: string[] };
+//   afterAll: { name: string; statements: string[] };
+//   afterEach: { name: string; statements: string[] };
+// };
 
 // enum TYPE {
 //   FILE = "fixture",
@@ -60,16 +113,16 @@ export type setupTeardownObject = {
 // export type assignObject = {
 //   type: TYPE.ASSIGN;
 //   left: string;
-//   right: string | callObject;
+//   right: string | CallObject;
 // };
 
-// export type callObject = {
+// export type CallObject = {
 //   type: TYPE.CALL;
 //   target: string;
 //   args: [];
 // };
 
-// export type testCaseObject = {
+// export type TestCaseObject = {
 //   type: TYPE.TEST_CASE;
 //   name: string;
 //   statements: [];
@@ -77,6 +130,6 @@ export type setupTeardownObject = {
 
 // export type assertEqualObject = {
 //   type: TYPE.ASSERT_EQUAL;
-//   target: string | callObject;
-//   tobe: string | callObject;
+//   target: string | CallObject;
+//   tobe: string | CallObject;
 // };

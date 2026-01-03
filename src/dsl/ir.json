@@ -1,6 +1,6 @@
 {
-    "type" : "fixture",
-    "name" : "fixture name",
+    "type" : "file",
+    "name" : "file name",
     "statements" : [
         {
             "type" : "assign",
@@ -17,28 +17,42 @@
             }
         },
         {
-            "type" : "beforeAll",
-            "name" : "do this before all tests",
-            "statements" : [
-                {
-                    "type" : "assign",
-                    "left" : "y",
-                    "right" : {
-                        "type" : "call",
-                        "target" : "func",
-                        "args" : ["1", "3"]
+            "type": "fixture",
+            "beforeAll": {
+                "name": "",
+                "statements": [
+                    {
+                        "type" : "assign",
+                        "left" : "y",
+                        "right" : {
+                            "type" : "call",
+                            "target" : "func",
+                            "args" : ["1", "3"]
+                        }
+                    },
+                    {
+                        "type" : "assign",
+                        "left" : "y",
+                        "right" : {
+                            "type" : "call",
+                            "target" : "func",
+                            "args" : ["1", "3"]
+                        }
                     }
-                },
-                {
-                    "type" : "assign",
-                    "left" : "y",
-                    "right" : {
-                        "type" : "call",
-                        "target" : "func",
-                        "args" : ["1", "3"]
-                    }
-                }
-            ]
+                ]
+            },
+            "beforeEach": {
+                "name": "",
+                "statements":[]
+            },
+            "afterAll": {
+                "name": "",
+                "statements":[]
+            },
+            "afterEach": {
+                "name": "",
+                "statements":[]
+            }
         },
         {
             "type" : "testCase",
@@ -57,7 +71,7 @@
                             }, 3
                         ]
                     },
-                    "tobe" : "12"
+                    "toEqual" : "12"
                 }
             ]
         },
@@ -77,7 +91,84 @@
                         "target" : "mul",
                         "args" : ["100", "num"]
                     },
-                    "tobe" : "num"
+                    "toEqual" : "num"
+                }
+            ]
+        },
+        {
+            "type" : "skippedTestCase",
+            "name" : "test_3",
+            "statements" : [
+                {
+                    "type": "declare",
+                    "left": "num",
+                    "right": "0"
+                },
+                {
+                    "type" : "assertSame",
+                    "target" : {
+                        "type" : "call",
+                        "target" : "mul",
+                        "args" : ["100", "num"]
+                    },
+                    "toBe" : "num"
+                }
+            ]
+        },
+        {
+            "type" : "testCase",
+            "name" : "test_4",
+            "statements" : [
+                {
+                    "type": "assertTrue",
+                    "target": "x"
+                },
+                {
+                    "type" : "assertFalse",
+                    "target" : {
+                        "type" : "call",
+                        "target" : "mul",
+                        "args" : ["100", "num"]
+                    }
+                }
+            ]
+        },
+        {
+            "type" : "testCase",
+            "name" : "test_5",
+            "statements" : [
+                {
+                    "type": "assertNull",
+                    "target": "x"
+                },
+                {
+                    "type" : "assertEqual",
+                    "target" : {
+                        "type" : "call",
+                        "target" : "mul",
+                        "args" : ["100", "num"]
+                    },
+                    "toEqual" : "199",
+                    "delta": "6"
+                }
+            ]
+        },
+        {
+            "type" : "testCase",
+            "name" : "test_6",
+            "statements" : [
+                {
+                    "type": "assertThrow",
+                    "target": "x",
+                    "error": "Error"
+                },
+                {
+                    "type" : "assertThrow",
+                    "target" : {
+                        "type" : "call",
+                        "target" : "mul",
+                        "args" : ["100", "num"]
+                    }
                 }
             ]
         }
