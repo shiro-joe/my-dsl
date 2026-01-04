@@ -89,6 +89,13 @@ export type fixtureObject = {
   afterEach: { name: string; statements: [] };
 };
 
+// 生言語
+export type RawLangObject = {
+  type: string;
+  lang: string;
+  content: string;
+};
+
 // export type setupTeardownObject = {
 //   beforeAll: { name: string; statements: string[] };
 //   beforeEach: { name: string; statements: string[] };

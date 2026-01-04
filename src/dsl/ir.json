@@ -171,6 +171,11 @@
                     }
                 }
             ]
+        },
+        {
+            "type" : "rawLang",
+            "lang" : "JS",
+            "content" : "console.log(\"aaa\")"
         }
     ]
 }

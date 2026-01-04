@@ -1,5 +1,6 @@
 // コードが文字列で返ってくる
 export interface Generator {
+  lang: string;
   generateAssignCode: (left: string, right: string) => string;
   generateCallCode: (target: string, args: string[]) => string;
   generateAssertEqualCode: (
@@ -32,4 +33,5 @@ export interface Generator {
     afterAll: [name: string, statements: string[]],
     afterEach: [name: string, statements: string[]],
   ) => string;
+  generateRawLangCode: (lang: string, content: string) => string;
 }

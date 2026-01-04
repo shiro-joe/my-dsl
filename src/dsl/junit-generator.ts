@@ -2,6 +2,7 @@ import type { Generator } from "./generator.ts";
 
 // JUnit用
 export class JUnitCodeGenerator implements Generator {
+  lang = "Java";
   public constructor() {}
   private readonly INDENT = "    ";
   public generateAssignCode = (left: string, right: string) => {
@@ -84,7 +85,12 @@ export class JUnitCodeGenerator implements Generator {
       : "";
     return res;
   };
-
+  public generateRawLangCode = (lang: string, content: string) => {
+    if (lang == this.lang) {
+      return content;
+    }
+    return `// ${content}`;
+  };
   // private readonly keyMap = {
   //   beforeAll: ["static ", "BeforeAll"],
   //   beforeEach: ["", "BeforeEach"],

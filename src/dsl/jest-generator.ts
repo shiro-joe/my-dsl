@@ -2,6 +2,7 @@ import type { Generator } from "./generator.ts";
 
 // Jest用
 export class JestCodeGenerator implements Generator {
+  lang = "JS";
   public constructor() {}
 
   private readonly INDENT = "    ";
@@ -81,6 +82,12 @@ export class JestCodeGenerator implements Generator {
       ? `afterEach(() = > {\n${afterEach[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + ";\n").join("")}})`
       : "";
     return res;
+  };
+  public generateRawLangCode = (lang: string, content: string) => {
+    if (lang == this.lang) {
+      return content;
+    }
+    return `// ${content}`;
   };
 }
 export {};

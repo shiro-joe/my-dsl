@@ -2,6 +2,7 @@ import type { Generator } from "./generator.ts";
 
 // pytest用
 export class PytestCodeGenerator implements Generator {
+  lang = "Python";
   public constructor() {}
 
   private readonly INDENT = "    ";
@@ -68,5 +69,11 @@ export class PytestCodeGenerator implements Generator {
     const suiteFx = `@pytest.fixture(scope="module", autouse=True)\ndef suite_fixture():\n${beforeAll[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}${this.INDENT}yield\n${afterAll[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
     const caseFx = `@pytest.fixture(scope="function", autouse=True)\ndef case_fixture():\n${beforeEach[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}${this.INDENT}yield\n${afterEach[1].map((x) => this.INDENT + x.replace(/\n/g, `\n${this.INDENT}`) + "\n").join("")}`;
     return suiteFx + caseFx;
+  };
+  public generateRawLangCode = (lang: string, content: string) => {
+    if (lang == this.lang) {
+      return content;
+    }
+    return `# ${content}`;
   };
 }

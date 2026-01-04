@@ -14,6 +14,7 @@ import type {
   AssertTrueObject,
   AssertNullObject,
   AssertThrowObject,
+  RawLangObject,
 } from "./ir.js";
 import { JestCodeGenerator } from "./jest-generator.js";
 import { JUnitCodeGenerator } from "./junit-generator.js";
@@ -219,6 +220,11 @@ class Translator {
     return this.generator.generateAssertThrowCode(target, obj.error);
   };
 
+  // 生
+  private translateRawLangObject = (obj: RawLangObject) => {
+    return this.generator.generateRawLangCode(obj.lang, obj.content);
+  };
+
   // typeと関数の割り当て
   private readonly keyMap = {
     assign: this.translateAssignObject,
@@ -233,6 +239,7 @@ class Translator {
     assertThrow: this.translateAssertThrowObject,
     declare: this.translateDeclareObject,
     fixture: this.translateSetupTeardownObject,
+    rawLang: this.translateRawLangObject,
     // beforeAll: this.translateSetupTeardownObject,
     // beforeEach: this.translateSetupTeardownObject,
     // afterAll: this.translateSetupTeardownObject,

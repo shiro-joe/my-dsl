@@ -28,6 +28,7 @@ describe(file name, () => {
         expect(x).toThrow(Error);
         expect(mul(100, num)).toThrow();
     });
+    console.log("aaa");
 });
 
 junit
@@ -70,6 +71,7 @@ public class file name {
         assertThrows(Error, x);
         assertThrows(Exception.class, mul(100, num));
     };
+    // console.log("aaa");
 }
 
 unittest
@@ -108,6 +110,7 @@ class file name(unittest.TestCase):
         with self.assertRaises(Exception): 
             raise mul(100, num)
     
+    # console.log("aaa")
 
 
 pytest
@@ -150,4 +153,5 @@ class file name:
         with pytest.raises(Exception):
             raise mul(100, num)
     
+    # console.log("aaa")
 

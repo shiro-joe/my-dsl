@@ -2,6 +2,7 @@ import type { Generator } from "./generator.ts";
 
 // Unittest用
 export class UnittestCodeGenerator implements Generator {
+  lang = "Python";
   public constructor() {}
 
   private readonly INDENT = "    ";
@@ -88,4 +89,10 @@ export class UnittestCodeGenerator implements Generator {
   // };
   // private readonly isKey = (key: string): key is keyof typeof this.keyMap =>
   //   Object.hasOwn(this.keyMap, key);
+  public generateRawLangCode = (lang: string, content: string) => {
+    if (lang == this.lang) {
+      return content;
+    }
+    return `# ${content}`;
+  };
 }
