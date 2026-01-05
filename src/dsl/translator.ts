@@ -132,11 +132,16 @@ class Translator {
   private translateDeclareObject = (obj: DeclareObject) => {
     const type = obj.data_type;
     const left = obj.left;
-    let right;
-    if (typeof obj.right === "object") {
-      right = this.translateCallObject(obj.right);
-    } else {
+    let right: string;
+    if (typeof obj.right === "string") {
       right = obj.right;
+    } else {
+      const type = obj.right.type;
+      if (this.isKey(type)) {
+        right = this.keyMap[type](obj.right as any);
+      } else {
+        right = "変換不可能";
+      }
     }
     if (right === "") {
       return this.generator.generateDeclareCode(type, left);
@@ -148,15 +153,25 @@ class Translator {
   // assert equal
   private translateAssertEqualObject = (obj: AssertEqualObject) => {
     let target: string, toEqual: string;
-    if (typeof obj.target === "object") {
-      target = this.translateCallObject(obj.target);
-    } else {
+    if (typeof obj.target === "string") {
       target = obj.target;
-    }
-    if (typeof obj.toEqual === "object") {
-      toEqual = this.translateCallObject(obj.toEqual);
     } else {
+      const type = obj.target.type;
+      if (this.isKey(type)) {
+        target = this.keyMap[type](obj.target as any);
+      } else {
+        target = "変換不可能";
+      }
+    }
+    if (typeof obj.toEqual === "string") {
       toEqual = obj.toEqual;
+    } else {
+      const type = obj.toEqual.type;
+      if (this.isKey(type)) {
+        toEqual = this.keyMap[type](obj.toEqual as any);
+      } else {
+        toEqual = "変換不可能";
+      }
     }
     const delta = Number(obj.delta);
     return this.generator.generateAssertEqualCode(target, toEqual, delta);
@@ -166,12 +181,22 @@ class Translator {
   private translateAssertSameObject = (obj: AssertSameObject) => {
     let target: string, toBe: string;
     if (typeof obj.target === "object") {
-      target = this.translateCallObject(obj.target);
+      const type = obj.target.type;
+      if (this.isKey(type)) {
+        target = this.keyMap[type](obj.target as any);
+      } else {
+        target = "変換不可能";
+      }
     } else {
       target = obj.target;
     }
     if (typeof obj.toBe === "object") {
-      toBe = this.translateCallObject(obj.toBe);
+      const type = obj.toBe.type;
+      if (this.isKey(type)) {
+        toBe = this.keyMap[type](obj.toBe as any);
+      } else {
+        toBe = "変換不可能";
+      }
     } else {
       toBe = obj.toBe;
     }
@@ -182,7 +207,12 @@ class Translator {
   private translateAssertTrueObject = (obj: AssertTrueObject) => {
     let target: string;
     if (typeof obj.target === "object") {
-      target = this.translateCallObject(obj.target);
+      const type = obj.target.type;
+      if (this.isKey(type)) {
+        target = this.keyMap[type](obj.target as any);
+      } else {
+        target = "変換不可能";
+      }
     } else {
       target = obj.target;
     }
@@ -191,7 +221,12 @@ class Translator {
   private translateAssertFalseObject = (obj: AssertFalseObject) => {
     let target: string;
     if (typeof obj.target === "object") {
-      target = this.translateCallObject(obj.target);
+      const type = obj.target.type;
+      if (this.isKey(type)) {
+        target = this.keyMap[type](obj.target as any);
+      } else {
+        target = "変換不可能";
+      }
     } else {
       target = obj.target;
     }
@@ -202,7 +237,12 @@ class Translator {
   private translateAssertNullObject = (obj: AssertNullObject) => {
     let target: string;
     if (typeof obj.target === "object") {
-      target = this.translateCallObject(obj.target);
+      const type = obj.target.type;
+      if (this.isKey(type)) {
+        target = this.keyMap[type](obj.target as any);
+      } else {
+        target = "変換不可能";
+      }
     } else {
       target = obj.target;
     }
@@ -211,13 +251,28 @@ class Translator {
 
   // 例外
   private translateAssertThrowObject = (obj: AssertThrowObject) => {
-    let target: string;
+    let target: string, error: string;
     if (typeof obj.target === "object") {
-      target = this.translateCallObject(obj.target);
+      const type = obj.target.type;
+      if (this.isKey(type)) {
+        target = this.keyMap[type](obj.target as any);
+      } else {
+        target = "変換不可能";
+      }
     } else {
       target = obj.target;
     }
-    return this.generator.generateAssertThrowCode(target, obj.error);
+    if (typeof obj.error === "object") {
+      const type = obj.error.type;
+      if (this.isKey(type)) {
+        error = this.keyMap[type](obj.error as any);
+      } else {
+        error = "変換不可能";
+      }
+    } else {
+      error = obj.error;
+    }
+    return this.generator.generateAssertThrowCode(target, error);
   };
 
   // 生

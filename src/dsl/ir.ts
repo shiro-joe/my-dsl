@@ -26,7 +26,7 @@ export type DeclareObject = {
   type: string;
   data_type: string;
   left: string;
-  right: string | CallObject;
+  right: string | CallObject | RawLangObject;
 };
 
 // テストケース
@@ -46,38 +46,38 @@ export type SkippedTestCaseObject = {
 // toEqualアサーション
 export type AssertEqualObject = {
   type: string;
-  target: string | CallObject;
-  toEqual: string | CallObject;
+  target: string | CallObject | RawLangObject;
+  toEqual: string | CallObject | RawLangObject;
   delta: string;
 };
 // toBeアサーション
 export type AssertSameObject = {
   type: string;
-  target: string | CallObject;
-  toBe: string | CallObject;
+  target: string | CallObject | RawLangObject;
+  toBe: string | CallObject | RawLangObject;
 };
 // toBeTruthy
 export type AssertTrueObject = {
   type: string;
-  target: string;
+  target: string | CallObject | RawLangObject;
 };
 // toBeFalsy
 export type AssertFalseObject = {
   type: string;
-  target: string;
+  target: string | CallObject | RawLangObject;
 };
 
 // null
 export type AssertNullObject = {
   type: string;
-  target: string;
+  target: string | CallObject | RawLangObject;
 };
 
 // 例外
 export type AssertThrowObject = {
   type: string;
-  target: string;
-  error: string;
+  target: string | CallObject | RawLangObject;
+  error: string | RawLangObject;
 };
 
 // セットアップ・ティアダウン

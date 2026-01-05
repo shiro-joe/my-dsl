@@ -22,7 +22,7 @@ describe(file name, () => {
     });
     test(test_5, () => {
         expect(x).toBeNull();
-        expect(mul(100, num)).toBeCloseTo(199, 6);
+        expect(// hogeeee).toBeCloseTo(199, 6);
     });
     test(test_6, () => {
         expect(x).toThrow(Error);
@@ -64,7 +64,7 @@ public class file name {
     @Test
     public void test_5() {
         assertNull(x);
-        assertEquals(199, mul(100, num), 1e-6);
+        assertEquals(199, // hogeeee, 1e-6);
     };
     @Test
     public void test_6() {
@@ -102,7 +102,7 @@ class file name(unittest.TestCase):
     
     def test_5(self):
         self.assertIsNone(x)
-        self.assertAlmostEqual(mul(100, num), 199, places=6)
+        self.assertAlmostEqual(# hogeeee, 199, places=6)
     
     def test_6(self):
         with self.assertRaises(Error):
@@ -145,7 +145,7 @@ class file name:
     
     def test_5(self):
         assert x is None
-        assert mul(100, num) == pytest.approx(199, abs=1e-6)
+        assert # hogeeee == pytest.approx(199, abs=1e-6)
     
     def test_6(self):
         with pytest.raises(Error):

@@ -144,9 +144,8 @@
                 {
                     "type" : "assertEqual",
                     "target" : {
-                        "type" : "call",
-                        "target" : "mul",
-                        "args" : ["100", "num"]
+                        "type" : "rawLang",
+                        "content": "hogeeee"
                     },
                     "toEqual" : "199",
                     "delta": "6"
