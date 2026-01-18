@@ -1,0 +1,21 @@
+JS{
+    import { Calculator } from "./sample.js";
+    const calc = new Calculator();
+}
+
+
+AfterAll{
+    JS{
+        calc.reset
+    }
+}
+
+
+Test "adds 1 + 2 to equal 3"{
+    equals{
+        JS{
+            calc.add(1, 2)
+        },
+        3
+    }
+}

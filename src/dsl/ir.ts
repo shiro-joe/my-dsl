@@ -83,6 +83,7 @@ export type AssertThrowObject = {
 // セットアップ・ティアダウン
 
 export type fixtureObject = {
+  type: string;
   beforeAll: { name: string; statements: [] };
   beforeEach: { name: string; statements: [] };
   afterAll: { name: string; statements: [] };

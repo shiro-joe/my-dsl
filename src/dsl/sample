@@ -1,0 +1,48 @@
+JS{
+    "use strict";
+    import { Calculator } from "./sample.js";
+}
+
+
+BeforeAll{
+    JS{
+        const calc = new Calculator();
+    }
+}
+BeforeEach{
+    JS{
+        calc.setup();
+    }
+}
+AfterEach{
+    JS{
+        calc.reset();
+    }
+}
+
+Test test_1{
+    equal{
+        JS{
+            calc.add(1, 2)
+        },
+        3
+    }
+    // @Call を使うと
+    equal{
+        calc.add{
+            1, 2
+        },
+        3
+    }
+}
+
+Test test_2 {
+    isTrue{
+        calc.sub{
+            3,
+            JS{
+                calc.add(1,1)
+            }
+        }
+    }
+}
