@@ -1,4 +1,3 @@
-import { stat } from "fs";
 
 class Compiler {
   private readonly notKeyword = new Set([
@@ -181,13 +180,9 @@ class Compiler {
         tokens.push(tokenArr[i] as Token);
       }
     }
-    console.log(tokens);
+    // console.log(tokens);
     // ここから、tokensをirに変換します！頑張れ！
-    for (let i = 0; i < tokens.length; i++) {
-        switch (tokens[i]?.kind) {
-            case 
-        }
-    }
+    this.parse(tokens, "a")
 
     // try{
     //     blocks = this.parse(tokenArr)
@@ -217,13 +212,86 @@ class Compiler {
     })
     let pos = 0;
     const length = tokens.length;
-    const makeObject = (): object => {
-        const token: Token = tokens[pos] as Token;
+    const addPos = (): boolean => {
         pos++;
-        switch (token.kind) {
-            case TokenKind.TEST_CASE:
+        if(pos < length){
+            return true
+        } else {
+            throw new Error("syntax error")
+            return false
         }
     }
+    const makeObject = (): any => {
+        let res: object = {};
+        let token: Token = tokens[pos] as Token;
+        let target;
+        let x;
+        addPos();
+        switch (token.kind) {
+            case TokenKind.TEST_CASE:
+                console.log("testcase")
+                token = tokens[pos] as Token
+                addPos();
+                let testCaseObj = {
+                    type: "testCase",
+                    name: token.text,
+                    statements: [] as any
+                }
+                token = tokens[pos] as Token
+                addPos();
+                while(token.kind != TokenKind.RIGHT_BRACE) {
+                    testCaseObj.statements.push(makeObject());
+                    token = tokens[pos] as Token
+                    addPos();
+                }
+                res = testCaseObj;
+                console.log(res)
+            case TokenKind.SKIPPED_TEST_CASE:
+                console.log("testcase")
+                token = tokens[pos] as Token
+                addPos();
+                let skippedTestCaseObj = {
+                    type: "skippedTestCase",
+                    name: token.text,
+                    statements: [] as any
+                }
+                token = tokens[pos] as Token
+                addPos();
+                while(token.kind != TokenKind.RIGHT_BRACE) {
+                    skippedTestCaseObj.statements.push(makeObject());
+                    token = tokens[pos] as Token
+                    addPos();
+                }
+                res = skippedTestCaseObj;
+                console.log(res)
+            case TokenKind.ASSERT_EQUAL:
+                // いまposが{を指してるはず、次がターゲット、その次が比較先
+                addPos();
+                target = makeObject();
+                addPos();
+                x = makeObject();
+                x = tokens[pos] as Token;
+                let assertEqualObj = {
+                    type: "assertEqual",
+                    target: target,
+                    toEqual: x
+                }
+                res = assertEqualObj
+            default:
+                while(token.kind != TokenKind.RIGHT_BRACE) {
+                    token = tokens[pos] as Token
+                    addPos();
+                }
+                console.log("その他")
+
+        }
+        return res;
+    }
+    while(pos < length) {
+        resIR.statements.push(makeObject())
+    }
+    console.log(resIR)
+    return resIR;
   }
   // private parse(tokenArr: Token[]) {
   //     let pos = 0;

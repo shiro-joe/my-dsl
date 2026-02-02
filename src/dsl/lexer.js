@@ -169,7 +169,9 @@ var Compiler = /** @class */ (function () {
                 tokens.push(tokenArr[i]);
             }
         }
-        console.log(tokens);
+        // console.log(tokens);
+        // ここから、tokensをirに変換します！頑張れ！
+        this.parse(tokens, "a");
         // try{
         //     blocks = this.parse(tokenArr)
         // } catch (e) {
@@ -179,7 +181,72 @@ var Compiler = /** @class */ (function () {
         // console.log(blocks)
         //let ir = this.toIR(blocks)
     };
-    Compiler.prototype.parse = function (tokens, rawCode) {
+    Compiler.prototype.parse = function (tokens, name) {
+        var resIR = {
+            type: "file",
+            name: name,
+            statements: []
+        };
+        var blankFixtureObject = {
+            name: "",
+            statements: []
+        };
+        resIR.statements.push({
+            type: "fixture",
+            beforeAll: blankFixtureObject,
+            beforeEach: blankFixtureObject,
+            afterAll: blankFixtureObject,
+            afterEach: blankFixtureObject
+        });
+        var pos = 0;
+        var length = tokens.length;
+        var addPos = function () {
+            pos++;
+            if (pos < length) {
+                return true;
+            }
+            else {
+                throw new Error("syntax error");
+                return false;
+            }
+        };
+        var makeObject = function () {
+            var res = {};
+            var token = tokens[pos];
+            addPos();
+            switch (token.kind) {
+                case TokenKind.TEST_CASE:
+                    console.log("testcase");
+                    token = tokens[pos];
+                    addPos();
+                    var obj = {
+                        type: "testCase",
+                        name: token.text,
+                        statements: []
+                    };
+                    token = tokens[pos];
+                    addPos();
+                    while (token.kind != TokenKind.RIGHT_BRACE) {
+                        obj.statements.push(makeObject());
+                        token = tokens[pos];
+                        addPos();
+                    }
+                    res = obj;
+                    console.log(res);
+                default:
+                    while (token.kind != TokenKind.RIGHT_BRACE) {
+                        token = tokens[pos];
+                        addPos();
+                    }
+                    console.log("その他");
+            }
+            return res;
+        };
+        while (pos < length) {
+            resIR.statements.push(makeObject());
+        }
+        console.log(resIR);
+        return resIR;
     };
     return Compiler;
 }());
